@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <h:form id="list_solicitacao">
+                <div class="row">
+                    <div class="col-md-11 wrapper" id="doc-menu-container" style="float: left;">
+                        <h:panelGroup id="messagePanel" layout="block">
+                            <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                        </h:panelGroup>
+                        <h:panelGroup class="panel panel-default"  layout="block" style="width:100%; padding: 5px">
+                            <div class="panel-heading">Solicitações Pendentes</div>
+                            <h:panelGroup class="panel-body">
+                                <h:panelGroup class="col-md-12">
+                                    <div class="row">
+                                        <table id="table-doc-list" class=" table table-hover table-striped order-column display" 
+                                               cellpadding="2" cellspacing="0" width="100%">
+                                            <thead>    
+                                                <tr>
+                                                    <th><h:inputText id="col0_filter" title="0" class="column_filter"/></th>
+                                                    <th><h:inputText id="col1_filter" title="1" class="column_filter"/></th>
+                                                    <th><h:inputText id="col2_filter" title="2" class="column_filter"/></th>
+                                                    <th><h:inputText id="col3_filter" title="3" class="column_filter"/></th>
+                                                    <th></th>
+                                                </tr>
+                                                <tr>
+                                                    <th>ID da Atividade</th>
+                                                    <th>Data</th>
+                                                    <th>Modalidade</th>
+                                                    <th>Tipo</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>      
+                                                <ui:repeat value="#{solicitacaoController.solicitacoesPendentes}" var="item">
+                                                    <tr>
+                                                        <td>
+                                                            <h:outputText value="#{item.atividade.id}"/>                                                   
+                                                        </td>
+                                                        <td>
+                                                            <h:outputText value="#{item.atividade.dt}">
+                                                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td>
+                                                            <h:outputText value="#{item.atividade.modalidade.descricao}"/>
+                                                        </td>
+                                                        <td>
+                                                            <h:outputText value="#{item.atividade.tipo.descricao}"/>
+                                                        </td>
+                                                        <td>
+                                                            <h:link class="btn btn-success" outcome="view_solicitacao.xhtml?idKey=#{item.id}&amp;idAtividade=#{item.atividade.id}" >
+                                                                <span class="pull-left">Visualizar Detalhes</span>
+                                                            </h:link>
+                                                        </td>
+                                                    </tr>
+                                                </ui:repeat>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </h:panelGroup>    
+                            </h:panelGroup>    
+                        </h:panelGroup>    
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>    
+        <ui:define name="title">        
+            #{bundle.SystemName} - #{bundle.CreateAtividadeTitle}   
+        </ui:define>
+    </ui:composition>
+</html>

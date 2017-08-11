@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <p:tabView style="margin-left: 0px; width: 100%; font-size: 16px" dynamic="true">
+                <p:tab title="Envio de dados" >
+                    <h:form id="smart-data">
+                        <h:panelGroup id="messagePanel" layout="block">
+                            <h:messages for="form-list-doc" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup class="col-lg-12" layout="block">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h3 class="page-header">
+                                        Envio de dados de Tele-educação para o Sistema de Monitoramento e Avaliação dos
+                                        Resultados do Programa Telessaúde
+                                    </h3>
+                                </div>
+                            </div>
+                            <h:panelGroup style="font-size: 16px"> Mensalmente o núcleo de Telessaúde deve enviar os dados para o SMART sua produção de 
+                            Teleconsultoria e/ou Telediagnóstico e/ou Tele-educação com base na nota técnica 
+                            005/2014 - DEGES/SGTES/MS, isto é, o SMART recebe dos núcleos os dados já contabilizados.</h:panelGroup>
+                            <br/>
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="URL: " class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-7">
+                                    <h:selectOneMenu value="#{smartController.url}" 
+                                                    id="url" class="form-control">
+                                       <f:selectItems 
+                                           value="#{smartController.urls}" 
+                                           var="item"
+                                           itemLabel="#{item}"
+                                           itemValue="#{item}"
+                                           pt:required="true"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup class="form-group row">
+        <!--                                <p:messages id="returnMsgEstabelecimento" style="font-size: 16px"/>
+                                <p:messages id="returnMsgProfissionais" style="font-size: 16px"/>
+                                <p:messages id="returnMsgTeleconsultorias" style="font-size: 16px"/>-->
+                                <p:messages id="returnMsg" escape="false" style="font-size: 16px"/>
+
+                                <h:outputLabel value="Mês: " for="mes" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-3">
+                                    <p:messages for="mes" id="mesMsg" />
+                                    <h:selectOneMenu value="#{smartController.monthName}" 
+                                                    id="mes" class="form-control">
+                                       <f:selectItems 
+                                           value="#{smartController.meses.names}" 
+                                           var="item"
+                                           itemLabel="#{item}"
+                                           itemValue="#{item}"
+                                           pt:required="true"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                                <h:outputLabel value="Ano: " for="year" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-2">
+                                    <h:selectOneMenu value="#{smartController.year}" 
+                                                    class="form-control">
+                                        <p:messages for="year" id="anoMsg" />
+                                        <f:selectItems 
+                                           value="#{smartController.meses.years}" 
+                                           var="item"
+                                           itemLabel="#{item}"
+                                           itemValue="#{item}"
+                                           pt:required="true"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <br/><br/>
+                            <h:panelGroup class="col-sm-4">
+        <!--                                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                    <p:graphicImage name="img/Loading1.gif" width="100" height="100"/>
+                                </p:dialog>-->
+                                <h:commandLink value=" Enviar dados para produção" style="font-size: 16px"
+                                    styleClass="btn btn-success" 
+                                    action="#{smartController.sendNtsMAData()}">
+                                </h:commandLink>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:form>
+                </p:tab>
+                <p:tab title="Relatório de dados válidos">
+                    <h:form id="reportSmart">
+                        #{smartController.setIsVisibleReportPanel(false)}
+                        #{smartController.setDefaultDates()}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h3 class="page-header">
+                                    Relatório de dados válidos para envio ao Sistema de Monitoramento e Avaliação dos
+                                    Resultados do Programa Telessaúde
+                                </h3>
+                            </div>
+                        </div>
+                        <h:panelGroup class="form-group row">
+                                <script>
+                                    datePickerLoader();
+                                </script>
+                                <h:outputLabel value="Período: " for="dt1" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-2">
+
+                                    <p:messages for="dt1" id="dtMsg" />
+                                    <h:inputText  
+                                        id="dt1" 
+                                        label="Data" 
+                                        class="date-mask date_picker form-control" 
+                                        value="#{smartController.dt1}"
+                                        required="true"
+                                        pt:placeholder="dd/mm/yyyy"
+                                        autocomplete="off">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                    </h:inputText>
+                                </h:panelGroup>
+                                <h:panelGroup class="col-sm-2">
+                                    <p:messages for="dt2" id="dtMsg2" />
+                                    <h:inputText  
+                                        id="dt2" 
+                                        label="Data" 
+                                        class="date-mask date_picker form-control" 
+                                        value="#{smartController.dt2}"
+                                        required="true"
+                                        pt:placeholder="dd/mm/yyyy"
+                                        autocomplete="off">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                    </h:inputText>
+                                </h:panelGroup>
+
+                            
+                            <h:commandButton value=" Gerar relatório" style="font-size: 16px"
+                                styleClass="btn btn-success" 
+                                action="#{smartController.getReportValidData()}">
+                                <f:ajax execute="dt1 dt2" render="reports" />
+                            </h:commandButton>
+                        </h:panelGroup>
+                        <h:panelGroup id="reports">
+                            <ui:fragment rendered="#{smartController.isVisibleReportPanel}">
+                                <h:panelGroup class="row">
+                                    <table class="table col-sm-6">
+                                        <thead>
+                                          <tr>
+                                            <th>Participações</th>
+                                            <th>Total</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>      
+                                        <tr class="success">
+                                            <td>Válidas</td>
+                                            <td>#{smartController.participacoesValidas}</td>
+                                        </tr>
+                                        <tr class="danger">
+                                            <td>Inválidas</td>
+                                            <td>#{smartController.participacoesInvalidas}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </h:panelGroup>
+                                
+                                <div class="container-fluid" style="font-size: 16px">
+                                    <div class="row">
+                                        <div id="toolbar">
+                                            <select class="form-control">
+                                                <option value="">Exportar Básico</option>
+                                                <option value="all">Exportar Todos</option>
+                                                <option value="selected">Exportar Selecionados</option>
+                                            </select>
+                                        </div>
+                                        <br/>
+                                        <table id="smart-table" 
+                                                data-toggle="table"
+                                                data-show-columns="true"
+                                                data-show-export="true"
+                                                data-pagination="true"
+                                                data-click-to-select="true"
+                                                data-toolbar="#toolbar"
+                                                data-show-toggle="true"
+                                                data-filter-control="true"
+                                                data-key-events="true"
+                                                data-url="../resources/data.json"
+                                                class="table table-hover table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="fullname" data-filter-control="input" data-sortable="true">Nome Completo</th>
+                                                    <th data-field="cpf" data-filter-control="input" data-sortable="true">CPF</th>
+                                                    <th data-field="prof" data-filter-control="input" data-sortable="true">Profissão</th>
+                                                    <th data-field="qtd" data-filter-control="input" data-sortable="true">Nº Participações</th>
+                                                    <th data-field="status" data-filter-control="input" data-sortable="true">Status</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                        <script>
+                                            var $table = $a('#smart-table');
+                                            $a(function () {
+                                                $a('#toolbar').find('select').change(function () {
+                                                    $table.bootstrapTable('destroy').bootstrapTable({
+                                                        exportDataType: $a(this).val()
+                                                    });
+                                                });
+                                                $a($table).bootstrapTable({
+                                                    showFilter: true
+                                                });
+                                            })
+                                        </script>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                        </h:panelGroup>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+        </ui:define>
+    </ui:composition>
+</html>

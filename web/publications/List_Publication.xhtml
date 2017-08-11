@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui" lang="pt-br">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <h:form id="form-list-doc">
+                <h:panelGroup  layout="block" style="font-size: 18px; width: 115%">
+                    <h:panelGroup id="messagePanel1" layout="block">
+                        <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                    </h:panelGroup>
+                    <h:panelGroup class="col-lg-16" layout="block">
+                        
+                        <h:panelGroup class="panel-body">
+                            <p:dataTable var="item" value="#{publicacaoController.ejbArtigo.findAll()}" paginator="true" rows="15"
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                         rowsPerPageTemplate="15, 25, 50, 100"  id="objetosTable"
+                                         tableStyleClass=""  widgetVar="dataTable">
+                                <p:column headerText="ID Publicação" style="col-lg-2" sortBy="#{item.id}" filterBy="#{item.id}" >
+                                    <h:outputText value="#{item.id}"/>
+                                </p:column>
+                                <p:column headerText="Título" style="col-lg-2" sortBy="#{item.resumo.title}" filterBy="#{item.resumo.title}" >
+                                    <h:outputText value="#{item.resumo.title}"/>
+                                </p:column>
+                                <p:column headerText="Data" style="col-lg-2" sortBy="#{item.data}" filterBy="#{item.data}" >
+                                    <h:outputText value="#{item.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                    </h:outputText>
+                                    
+                                </p:column>
+                                <p:column headerText="Local de Publicação" style="col-lg-2" sortBy="#{item.localPub}" filterBy="#{item.localPub}" >
+                                    <h:outputText value="#{item.localPub}"/>
+                                </p:column>
+                                <p:column headerText="Status" style="col-lg-2" sortBy="#{item.status.descricao}" filterBy="#{item.status.descricao}" >
+                                    <h:outputText value="#{item.status.descricao}"/>
+                                </p:column>
+                                <p:column headerText="">
+                                    <h:commandLink class=" btn btn-primary"  value="Visualizar Detalhes" action="#{publicacaoController.prepareView(item)}" target="_new"></h:commandLink>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

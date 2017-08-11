@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <h:panelGroup>
+                <h:messages for="formEdicaoVideo" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            
+            <h:form id="formEdicaoVideo">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Atividade Relacionada: " for="sala" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="idAtividadeRelacionada" showSummary="false" showDetail="true" />
+                            <h:inputText 
+                                id="idAtividadeRelacionada"
+                                label="atividade"
+                                class="form-control"
+                                required="true"
+                                value="#{atividadeController.atividadeEdicaoId}"
+                                pt:placeholder="ID"
+                                pt:readOnly="true"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Editor Audiovisual: " for="editor" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <p:messages for="editor" id="pessoaMsg" />
+                            <h:inputHidden 
+                                id="editor"
+                                class="form-control"
+                                value="#{atividadeController.edicao.editor}" 
+                                required="true">
+                                <f:converter converterId="pessoaConverter"/>
+                            </h:inputHidden>
+                            <h:inputText 
+                                id="editor-readonly"
+                                class="form-control"
+                                value="" 
+                                required="true" 
+                                pt:placeholder="Editor"
+                                pt:readonly="true"/>
+                        </h:panelGroup>
+                        <span class="btn btn-default" style="float:left;" onclick="showLightBox('list_pessoa'); setEditorTrue()">Escolher</span>
+                    </h:panelGroup> 
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Apoio Técnico: " for="apoio" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <p:messages for="apoio" id="pessoaMsg1" />
+                            <h:inputHidden 
+                                id="apoio"
+                                class="form-control"
+                                value="#{atividadeController.edicao.apoioTecnico}" 
+                                required="true">
+                                <f:converter converterId="pessoaConverter"/>
+                            </h:inputHidden>
+                            <h:inputText 
+                                id="apoio-readonly"
+                                class="form-control"
+                                value="" 
+                                required="true" 
+                                pt:placeholder="Apoio Técnico"
+                                pt:readonly="true"/>
+                        </h:panelGroup>
+                        <span class="btn btn-default" style="float:left;" onclick="showLightBox('list_pessoa'); setApoioTrue()">Escolher</span>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Revisor: " for="revisor" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <p:messages for="revisor" id="pessoaMsg2" />
+                            <h:inputHidden 
+                                id="revisor"
+                                class="form-control"
+                                value="#{atividadeController.edicao.revisor}" 
+                                required="true">
+                                <f:converter converterId="pessoaConverter"/>
+                            </h:inputHidden>
+                            <h:inputText 
+                                id="revisor-readonly"
+                                class="form-control"
+                                value="" 
+                                required="true" 
+                                pt:placeholder="Revisor"
+                                pt:readonly="true"/>
+                        </h:panelGroup>
+                        <span class="btn btn-default" style="float:left;" onclick="showLightBox('list_pessoa'); setRevisorTrue()">Escolher</span>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Publicação no Youtube: " for="dtY" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="dtY" showSummary="false" showDetail="true"/>
+                            <h:inputText  
+                                id="dtY" 
+                                label="Data" 
+                                class="date-mask date_picker form-control" 
+                                value="#{atividadeController.edicao.dataYoutube}"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>                                
+                            </h:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup class="col-sm-4">
+                            <p:message for="urlY" showSummary="false" showDetail="true"/>
+                            <h:inputText 
+                                id="urlY"
+                                label="UrlYoutube"
+                                class="form-control"
+                                value="#{atividadeController.edicao.urlYoutube}" 
+                                pt:placeholder="URL"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Publicação no Ares: " for="dtA" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="dtA" showSummary="false" showDetail="true" />
+                            <h:inputText  
+                                id="dtA" 
+                                label="Data" 
+                                class="date-mask date_picker form-control" 
+                                value="#{atividadeController.edicao.dataAres}"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup class="col-sm-4">
+                            <p:message for="urlA" showSummary="false" showDetail="true" />
+                            <h:inputText 
+                                id="urlA"
+                                label="UrlAres"
+                                class="form-control"
+                                value="#{atividadeController.edicao.urlAres}"
+                                pt:placeholder="URL"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-offset-6">
+                            <h:commandButton value="Finalizar Solicitação" action="#{atividadeController.persistAtividadeAndEdicaoVideo()}" class="btn btn-primary" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+            
+            <h:panelGroup class="lightbox-wrapper" id="list_pessoa">
+                <ui:include src="List_Pessoa.xhtml"/>    
+            </h:panelGroup>
+            
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        Decs
+                    </h1>
+                </div>
+            </div>
+            <h:form id="reportsForm">
+                #{graficosController.setDefaultDates()}
+                <div class="row">
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Período: " for="dt1" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+
+                            <p:messages for="dt1" id="dtMsg" />
+                            <h:inputText  
+                                id="dt1" 
+                                label="Data" 
+                                class="date-mask date_picker form-control" 
+                                value="#{graficosController.dt1}"
+                                required="true"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup class="col-sm-2">
+                            <p:messages for="dt2" id="dtMsg2" />
+                            <h:inputText  
+                                id="dt2" 
+                                label="Data" 
+                                class="date-mask date_picker form-control" 
+                                value="#{graficosController.dt2}"
+                                required="true"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                        
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group">
+                        <h:outputLabel value="Finalidade:" for="finalidade" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <p:messages for="finalidade" id="finalidadeMsg" />
+                            <h:inputText 
+                                id="finalidade"
+                                label="finalidade"
+                                class="form-control"
+                                value="#{graficosController.finalidade}" 
+                                pt:placeholder="Ex: E-SUS, APS, etc."/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </div>
+                <h:panelGroup class="form-group row">
+                    <h:panelGroup >
+                        <h:commandButton value="Gerar Relatório" action="#{graficosController.getDecs}" class="btn btn-primary">
+                            <f:ajax execute="dt1 dt2 finalidade" render="reports" />
+                        </h:commandButton>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup id="reports">
+                    <ui:fragment rendered="#{graficosController.top15Prof}">
+                        <script type="text/javascript">
+                            drawBarChart(#{graficosController.barChartTitle}, #{graficosController.dataArrayDecs});
+                        </script>
+                        <hr></hr>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-offset-2" style="font-size: 16px">
+                                    <b>Total</b> - <a>#{graficosController.chartTotal}</a>
+                                </div>
+                                <div id="barchart_values" style="width: 100%; height: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="container-fluid" style="font-size: 16px">
+                            <div class="row">
+                                <div id="toolbar">
+                                    <select class="form-control">
+                                        <option value="">Exportar Básico</option>
+                                        <option value="all">Exportar Todos</option>
+                                        <option value="selected">Exportar Selecionados</option>
+                                    </select>
+                                </div>
+                                <br/>
+                                <table id="decs-table" 
+                                        data-toggle="table"
+                                        data-show-columns="true"
+                                        data-show-export="true"
+                                        data-pagination="true"
+                                        data-click-to-select="true"
+                                        data-toolbar="#toolbar"
+                                        data-show-toggle="true"
+                                        data-filter-control="true"
+                                        data-key-events="true"
+                                        data-url="../resources/dataDecsGrafico.json"
+                                        class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th data-field="codigo" data-filter-control="input" data-sortable="true">Código</th>
+                                            <th data-field="descricao" data-filter-control="input" data-sortable="true">Nome</th>
+                                            <th data-field="quantidade" data-filter-control="input" data-sortable="true">Quantidade</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <script>
+                                    var $table = $a('#decs-table');
+                                    $a(function () {
+                                        $a('#toolbar').find('select').change(function () {
+                                            $table.bootstrapTable('destroy').bootstrapTable({
+                                                exportDataType: $a(this).val()
+                                            });
+                                        });
+                                        $a($table).bootstrapTable({
+                                            showFilter: true
+                                        });
+                                    })
+                                </script>
+                            </div>
+                        </div>
+                    </ui:fragment>
+                </h:panelGroup>
+            </h:form>
+                        
+        </ui:define>    
+    </ui:composition>
+</html>

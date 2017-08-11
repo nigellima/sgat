@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <h:panelGroup>
+                <h:messages for="formViagem"  showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form id="formViagem">       
+                <h:panelGroup class="form-group row" >
+                    <h:message for="panel-participacao-instituicao" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                    <h:panelGroup id="panel-participacao-instituicao"
+                                 class="panel panel-default col-sm-12" >
+                       <div class="panel-heading">
+                           <span style="font-size: 16px;">Participantes</span>
+                       </div>
+                       <div class="panel-body">
+                           <p:scrollPanel mode="native" styleClass="row" style="height:200px">
+                               <h:dataTable value="#{viagemController.participantes}" var="fun">
+                                   <h:column>
+                                       <h:panelGroup class="col-lg-12">
+                                           <h:outputText 
+                                               styleClass="form-control"
+                                               value="#{fun.pessoa.nome} #{fun.pessoa.sobrenome}"
+                                               pt:readonly="true"
+                                               style="margin: 5px"
+                                               />
+                                       </h:panelGroup>
+                                   </h:column>
+                                   <h:column>
+                                       <h:inputHidden id="instituicao-id" value="#{fun.id}"/>
+                                       <h:commandLink value="" 
+                                                      styleClass="btn btn-danger fa fa-times" 
+                                                      action="#{vigemController.removeParticipacao(fun)}">
+                                           <f:ajax render="formViagem:panel-participacao-instituicao" />
+                                       </h:commandLink>
+                                   </h:column>
+                               </h:dataTable>
+                           </p:scrollPanel>
+
+                           <h:panelGroup class="form-group row">
+                               <h:outputLabel value="Funcionario" for="funcionario" class="col-sm-2 control-label form-label-right"/>
+                               <h:panelGroup class="col-sm-6">
+                                   <h:message for="funcionario" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                   <p:selectOneMenu id="funcionario"
+                                                    value="#{viagemController.funcionarioId}" style="width: 100%"
+                                                    filter="true" filterMatchMode="startsWith">
+                                       <f:selectItem itemLabel="Selecione um Participante" pt:selected="true"/>
+                                       <f:selectItems 
+                                           value="#{viagemController.funcionarios}" 
+                                           var="item"
+                                           itemLabel="#{item.pessoa.nome} #{item.pessoa.sobrenome}"
+                                           itemValue="#{item.id}"/>
+                                   </p:selectOneMenu>
+                               </h:panelGroup>
+                               <h:commandLink value="Adicionar" action="#{viagemController.guardarParticipante()}" styleClass="btn  btn-success" style="  margin-bottom: 4px; font-size: 16px;">
+                                   <i class="fa fa-plus"></i>
+                                   <f:ajax execute="funcionario" render="formViagem:panel-participacao-instituicao" />
+                               </h:commandLink>
+                           </h:panelGroup>
+
+                       </div>
+                   </h:panelGroup>
+               </h:panelGroup>
+                
+                
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Motivo:" for="motivo" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <p:messages for="motivo" id="motivoMsg" />
+                            <h:inputTextarea  
+                                id="motivo" 
+                                label="Motivo"
+                                class="form-control" 
+                                style="resize: none; height: 50px;" 
+                                value="#{viagemController.viagem.motivo}"
+                                required="true"
+                                pt:placeholder="Motivo"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Percurso:" for="percurso" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <p:messages for="percurso" id="percursoMsg" />
+                            <h:inputText  
+                                id="percurso" 
+                                label="Percurso"
+                                class="form-control" 
+                                value="#{viagemController.viagem.percurso}"
+                                required="true"
+                                pt:placeholder="Percurso"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Saída:" for="dt_saida" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            <p:messages for="dt_saida" id="dt_saidaMsg" />
+                            <h:inputText  
+                                id="dt_saida" 
+                                label="Saida" 
+                                class="date-mask date_picker form-control" 
+                                value="#{viagemController.viagem.dtSaida}"
+                                required="true"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Chegada:" for="dt_chegada" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            <p:messages for="dt_chegada" id="dt_chegadaMsg" />
+                            <h:inputText  
+                                id="dt_chegada" 
+                                label="Chegada" 
+                                class="date-mask date_picker form-control" 
+                                value="#{viagemController.viagem.dtChegada}"
+                                required="true"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Descrição:" for="descricao" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <p:messages for="descricao" id="descricaoMsg" />
+                            <h:inputTextarea  
+                                id="descricao" 
+                                label="Descricao"
+                                class="form-control" 
+                                style="resize: none; height: 200px;" 
+                                value="#{viagemController.viagem.atividade.descricao}"
+                                required="true"
+                                pt:placeholder="Descricao"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Preenchimento:" for="dt_preenchimento" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            <p:messages for="dt_preenchimento" id="dt_preenchimetoMsg" />
+                            <h:inputText  
+                                id="dt_preenchimento" 
+                                label="Preenchimento" 
+                                class="date-mask date_picker form-control" 
+                                value="#{viagemController.viagem.dtPreenchimento}"
+                                required="true"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-offset-6">
+                            <h:commandButton value="Cadastrar" action="#{viagemController.save()}" class="btn btn-primary"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>            
+        </ui:define>
+    </ui:composition>
+</html>

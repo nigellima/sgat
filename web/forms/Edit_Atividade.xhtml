@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <h:panelGroup>
+                <h:messages for="formAtividade"  showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form id="formAtividade">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Atividade ID" for="modalidade" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:inputText 
+                                id="atividade_id"
+                                readonly="true"
+                                class="form-control"
+                                value="#{atividadeController.current.id}" 
+                                required="true"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Modalidade:" for="modalidade" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <p:messages for="modalidade" id="modalidadeMsg" />
+                            <h:selectOneMenu value="#{atividadeController.current.modalidade}" id="modalidade" class="form-control" valueChangeListener="#{atividadeController.setTipoByModalidade}">
+                                <f:ajax render="tipo" event="change"/>
+                                <f:converter converterId="modalidadeConverter" />
+                                <f:selectItem itemValue="#{null}" itemLabel="Selecione uma Modalidade" pt:selected="true"/>
+                                <f:selectItems 
+                                    value="#{atividadeController.modalidades}" 
+                                    var="item"
+                                    itemLabel="#{item.descricao}"
+                                    itemValue="#{item}"/>
+                                <f:validator validatorId="modalidade"/>
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+                        #{atividadeController.setTipoByModalidadeNoEvent(atividadeController.current.modalidade)}
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Tipo:" for="tipo" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <p:messages for="tipo" id="tipoMsg" />
+                            <h:selectOneMenu value="#{atividadeController.current.tipo}" id="tipo" class="form-control selectpicker">
+                                <f:converter converterId="tipoConverter" />
+                                <f:selectItem itemLabel="Selecione um Tipo" pt:selected="true"/>
+                                <f:selectItems 
+                                    value="#{atividadeController.tipos}" 
+                                    var="item"
+                                    itemLabel="#{item.descricao}"
+                                    itemValue="#{item}"/>
+                                <f:validator validatorId="tipo"/>
+                            </h:selectOneMenu>
+                            <h:panelGrid columns="10" style="margin: 10px; font-size: 12px" cellpadding="20">
+                                <h:outputLabel value="Atividade TBR: " for="tbr_ckeckbox" class="col-sm-12 control-label form-label-left"/>
+                                <p:selectBooleanCheckbox id="tbr_ckeckbox" style="margin-left: 5px;" value="#{atividadeController.isAtividadeTBR}"/>
+                            </h:panelGrid>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <!--Panel para atividade TBR-->
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup id="panel-atividade-tbr" class="panel panel-default col-sm-8 col-sm-offset-1" style="display:none">
+                            <div class="panel-heading">
+                                <span style="font-size: 16px;">Atividade Telessaúde Brasil Redes</span>
+                            </div>
+                            <div class="panel-body">
+                                <h:outputLabel value="Finalidade: " for="tbr_finalidade" class="col-sm-2 control-label form-label-right"/>
+                                <h:inputTextarea id="tbr_finalidade" class="form-control" 
+                                                 style="resize: none; height: 100px;" value="#{atividadeController.atividadeTbr.finalidade}">
+                                </h:inputTextarea>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <!--Fim do painel-->
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Tema Central:" for="tema_central" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <p:messages for="tema_central" id="tema_centralMsg" />
+                            <h:inputText 
+                                id="tema_central"
+                                label="Tema Central"
+                                class="form-control"
+                                value="#{atividadeController.current.tema}" 
+                                required="true" 
+                                pt:placeholder="Tema Central"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Código DecS:" for="decs" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <p:messages for="decs" id="decsMsg" />
+                            <h:inputText 
+                                id="decs"
+                                label="Código DecS"
+                                class="form-control"
+                                value="#{atividadeController.current.codDecs}" 
+                                pt:placeholder="Código Bireme"/>
+                        </h:panelGroup>
+                        <p:commandButton value=" Consultar" class="btn btn-default" style="float:left;" onclick="PF('codigos_decs').show();">
+                        </p:commandButton>
+                    </h:panelGroup>
+                    
+                    <!--Palestrante-->
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Palestrante:" for="pessoa" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <p:messages for="pessoa" id="pessoaMsg" />
+                            <h:inputHidden 
+                                id="pessoa"
+                                class="form-control"
+                                value="#{atividadeController.current.moderador}" 
+                                required="true">
+                                <f:converter converterId="pessoaConverter"/>
+                            </h:inputHidden>
+                            <h:inputText 
+                                id="palestrante-readonly"
+                                class="form-control"
+                                value="#{atividadeController.current.moderador.nome} #{atividadeController.current.moderador.sobrenome}" 
+                                required="true" 
+                                pt:placeholder="Palestrante"
+                                pt:readonly="true"/>
+                        </h:panelGroup>
+                        <span class="btn btn-default" style="float:left;" onclick="showLightBox('list_pessoa'); ">Escolher</span>
+                        <span id="btn-more-subjects" 
+                              class="btn fa #{not empty atividadeController.palestras ? 'fa-remove btn-warning' : 'fa-plus btn-success'} fa-1x" style="float:left; margin-left: 5px;">
+                        </span>
+                        <h:inputHidden id="subjects-control" value="#{atividadeController.isThereManySubjects}"/>
+                    </h:panelGroup>
+                    
+                    <!--Panel for Mesa Redonda Type-->
+                    <p:messages for="panel-mesa-redonda" id="panel-mesa-redondaMsg" />
+                    <h:panelGroup class="form-group row" >
+                        <h:panelGroup id="panel-mesa-redonda"
+                                    class="panel panel-default col-sm-8 col-sm-offset-1"
+                                    style="display: #{not empty atividadeController.palestras ? 'inline' : 'none'}">
+                            <div class="panel-heading">
+                                <span style="font-size: 16px;">Temas Secundários</span>
+                            </div>
+                            <div class="panel-body">
+                                <h:panelGroup id="palestras-mesa-redonda" class="row">
+                                    <h:dataTable value="#{atividadeController.palestras}" var="palestra">
+                                        <h:column>
+                                            <h:panelGroup class="col-md-12">
+                                                <h:inputText 
+                                                    class="form-control"
+                                                    value="#{palestra.pessoa.nome} #{palestra.pessoa.sobrenome}"
+                                                    pt:readonly="true"
+                                                    />
+                                            </h:panelGroup>
+                                        </h:column>
+                                        <h:column>
+                                            <h:panelGroup class="col-sm-12">
+                                                <h:outputLabel 
+                                                    class="form-control"
+                                                    value="#{palestra.tema}" 
+                                                    />
+                                            </h:panelGroup>
+                                        </h:column>
+                                        <h:column>
+                                            <h:inputHidden id="palestra-id" value="#{palestra.id}"/>
+                                            <h:commandLink value="" 
+                                                           styleClass="btn btn-danger fa fa-times" 
+                                                           action="#{atividadeController.removePalestra(palestra)}">
+                                                <f:ajax render=":formAtividade:palestras-mesa-redonda" />
+                                            </h:commandLink>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                                
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Tema:" for="tema_1" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-6">
+                                        <p:messages for="tema_1" id="tema_1Msg" />
+                                        <h:inputText 
+                                            id="tema_1"
+                                            label="Tema:"
+                                            class="form-control"
+                                            value="#{atividadeController.palestra.tema}" 
+                                            pt:placeholder="Tema"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Palestrante:" for="pessoa1" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-4">                                        
+                                        <p:messages for="pessoa1" id="pessoa1Msg" />
+                                        <h:inputHidden 
+                                            id="pessoa1"
+                                            class="form-control"
+                                            value="#{atividadeController.palestra.pessoa}" >
+                                            <f:converter converterId="pessoaConverter"/>
+                                        </h:inputHidden>
+                                        <h:inputText 
+                                            id="palestrante-readonly1"
+                                            class="form-control"
+                                            value="" 
+                                            pt:placeholder="Palestrante"
+                                            pt:readonly="true"/>
+                                    </h:panelGroup>
+                                    <span class="btn btn-default" style="float:left;" onclick="showLightBox('list_pessoa'); setMesaRedondaActived();">Escolher</span>
+                                </h:panelGroup>
+                                <h:commandLink value="Adicionar" action="#{atividadeController.guardarPalestra()}" styleClass="btn  btn-success" style="float: right;  margin-bottom: 4px; font-size: 16px;">
+                                    <i class="fa fa-plus"></i>
+                                    <f:ajax execute="pessoa1 tema_1" render="palestras-mesa-redonda" />
+                                </h:commandLink>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <!--Fim do painel-->
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Solicitante:" for="solicitante" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <p:messages for="solicitante" id="solicitanteMsg" />
+                            <h:inputHidden 
+                                id="solicitante"
+                                class="form-control"
+                                value="#{atividadeController.atvResponsavel}" 
+                                required="true">
+                                <f:converter converterId="pessoaConverter"/>
+                            </h:inputHidden>
+                            <h:inputText 
+                                id="solicitante-readonly"
+                                class="form-control"
+                                value="#{atividadeController.solicitacao.responsavel.nome} #{atividadeController.solicitacao.responsavel.sobrenome}" 
+                                required="true" 
+                                pt:placeholder="Solicitante"
+                                pt:readonly="true"/>
+                        </h:panelGroup>
+                        <span class="btn btn-default" style="float:left;" onclick="showLightBox('list_pessoa'); setSolicitanteTrue(); ">Escolher</span>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Descrição:" for="descricao" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            
+                            <p:messages for="descricao" id="descricaoMsg" />
+                            <h:inputTextarea  
+                                id="descricao" 
+                                label="Descrição"
+                                class="form-control" 
+                                style="resize: none; height: 100px;" 
+                                value="#{atividadeController.current.descricao}"
+                                required="true"
+                                pt:placeholder="Descrição"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Data:" for="dt" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            <p:messages for="dt" id="dtMsg" />
+                            <c:choose>
+                                <c:when  test="#{atividadeController.current.status.id == 4}">
+                                    <h:inputText  
+                                        id="dt-redonly" 
+                                        label="Data" 
+                                        class="date-mask form-control" 
+                                        value="#{atividadeController.current.dt}"
+                                        readonly="true"
+                                        pt:placeholder="dd/mm/yyyy"
+                                        autocomplete="off">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                        <f:validator validatorId="diaUtil" />
+                                    </h:inputText>
+                                </c:when>
+                                <c:otherwise>
+                                    <h:inputText  
+                                        id="dt" 
+                                        label="Data" 
+                                        class="date-mask date_picker form-control" 
+                                        value="#{atividadeController.current.dt}"
+                                        pt:placeholder="dd/mm/yyyy"
+                                        autocomplete="off">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                        <f:validator validatorId="diaUtil" />
+                                    </h:inputText>
+                                </c:otherwise>
+                            </c:choose>
+                            
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Início:" for="hr_inicio" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            
+                            <p:messages for="hr_inicio" id="hr_inicioMsg" />
+                            <h:inputText 
+                                id="hr_inicio" 
+                                label="Hora Início"
+                                class="form-control time-mask" 
+                                value="#{atividadeController.current.hrInicio}" 
+                                required="true"
+                                pt:placeholder="HH:mm" 
+                                autocomplete="off">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Término:" for="hr_termino" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            
+                            <p:messages for="hr_termino" id="hr_terminoMsg" />
+                            <h:inputText 
+                                id="hr_termino" 
+                                label="Hora Término"
+                                class="form-control time-mask" 
+                                value="#{atividadeController.current.hrTermino}"
+                                required="true" 
+                                pt:placeholder="HH:mm" 
+                                autocomplete="off">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row" rendered="#{atividadeController.solicitacao != null}">
+                        <h:outputLabel value="Qtd Participantes:" for="qtd_participantes" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-1">
+                            
+                            <p:messages for="qtd_participantes" id="qtd_participantesMsg" style="width: 125px;"/>
+                            <h:inputText  
+                                id="qtd_participantes" 
+                                label="Quantidade de Participantes"
+                                class="form-control num-pos-mask" 
+                                value="#{atividadeController.solicitacao.qtdLugares}"
+                                required="true"
+                                pt:placeholder="0"
+                                autocomplete="off">
+                                <f:convertNumber integerOnly="true" />
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup class="form-group row">
+                    <h:panelGroup class="col-sm-offset-6">
+                        <h:commandButton value="Salvar" action="#{atividadeController.updateAtividade()}" class="btn btn-primary"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+             <h:panelGroup class="lightbox-wrapper" id="list_pessoa">
+                <ui:include src="List_Pessoa.xhtml"/>
+            </h:panelGroup>
+            
+            <p:dialog header="Descritores Bireme" widgetVar="codigos_decs" modal="true" 
+                      height="600" width="800"
+                      showEffect="drop" hideEffect="drop">
+                <ui:include src="../smart/List_CodigosDecS.xhtml"/>    
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>

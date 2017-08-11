@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            45
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+        <welcome-file>lista.xhtml</welcome-file>
+    </welcome-file-list>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/index.xhtml</location>
+    </error-page>
+    <filter> 
+        <filter-name>LoginFilter</filter-name> 
+        <filter-class>service.LoginFilter</filter-class> 
+    </filter> 
+    <filter-mapping> 
+        <filter-name>LoginFilter</filter-name> 
+        <url-pattern>/atas/*</url-pattern>
+        <url-pattern>/atividades/*</url-pattern>
+        <url-pattern>/atividadesTBR/*</url-pattern>
+        <url-pattern>/destinatario/*</url-pattern>
+        <url-pattern>/documentoOficial/*</url-pattern>
+        <url-pattern>/forms/*</url-pattern> 
+        <url-pattern>/public/*</url-pattern>
+        <url-pattern>/resources/*</url-pattern> 
+        <url-pattern>/solicitacoes/*</url-pattern> 
+        <url-pattern>/views/*</url-pattern> 
+        <url-pattern>/webService/*</url-pattern> 
+    </filter-mapping>    
+    <listener>
+        <listener-class>service.SessionListener</listener-class>
+    </listener>
+
+    <context-param>
+       <param-name>primefaces.THEME</param-name>
+       <param-value>bootstrap</param-value>
+    </context-param>
+    <context-param>
+       <param-name>
+         javax.faces.WEBAPP_RESOURCES_DIRECTORY
+       </param-name>
+       <param-value>/resources</param-value>
+    </context-param>    
+</web-app>

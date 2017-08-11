@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <h:form>
+                <div class="row">
+                    <div class="col-md-10 wrapper" id="doc-menu-container" style="float: left;">
+                        <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h1 class="page-header">
+                                        Artigo
+                                    </h1>
+                                </div>
+                            </div>
+                            <h:panelGroup class="form-group row" style="font-size: 18px">
+                                <div class="dropdown col-lg-offset-1">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                        Opções <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <h:commandLink value=" Editar" 
+                                                           action="#{publicacaoController.prepareEditPaper(publicacaoController.current)}"
+                                                   styleClass="fa fa-edit" style="font-size: 18px"/>
+                                        </li>
+                                    </ul>                            
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Link da publicação: " for="link" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <h:outputText 
+                                        id="link"
+                                        class="form-control"
+                                        value="#{publicacaoController.current.link}" 
+                                        />
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Local da publicação: " for="local" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <h:outputText 
+                                        id="local"
+                                        class="form-control"
+                                        value="#{publicacaoController.current.localPub}" />
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Status: " for="local" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <h:outputText 
+                                        id="status"
+                                        class="form-control"
+                                        value="#{publicacaoController.current.status.descricao}" />
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Data:" for="dt" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-2">
+
+                                    <p:messages for="dt" id="dtMsg" />
+                                    <h:outputText  
+                                        id="dt" 
+                                        class="date-mask form-control" 
+                                        value="#{publicacaoController.current.data}"
+                                        pt:placeholder="dd/mm/yyyy">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                    </h:outputText>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row" 
+                                          rendered="#{not empty publicacaoController.findAutores(publicacaoController.current)}">
+                                <h:outputLabel value="Autores: " class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <h:dataTable class="table table-hover table-striped" value="#{publicacaoController.findAutores(publicacaoController.current)}" var="item">
+                                        <h:column>
+                                            <h:outputText  
+                                                class="form-control" 
+                                                value="#{item.pessoa.nome} #{item.pessoa.sobrenome}"/>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+
+                            </h:panelGroup>
+                            <h:panelGroup class="form-group row" rendered="#{publicacaoController.hasFinalPaper() != false}">
+                                <h:panelGroup class="col-sm-6">
+                                    <h:commandLink class="btn btn-primary" value="Baixar Artigo Completo">
+                                        <p:fileDownload value="#{publicacaoController.getFinalPaperFromServer()}" />
+                                    </h:commandLink>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <p:tabView dynamic="true">
+                                <p:tab title="Resumo Principal"> 
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Título: " for="titulo_pt" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="titulo_pt" id="titulo_ptMsg" />
+                                            <h:inputTextarea 
+                                                id="titulo_pt"
+                                                class="form-control"
+                                                readonly="true"
+                                                value="#{publicacaoController.current.resumo.title}" />
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Introdução: " for="intro_pt" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="intro_pt" id="intro_ptMsg" />
+                                            <h:inputTextarea 
+                                                id="intro_pt"
+                                                cols="30" rows="10"
+                                                readonly="true"
+                                                class="form-control"
+                                                value="#{publicacaoController.current.resumo.intro}"  
+                                                pt:placeholder="introdução"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Objetivo: " for="objetivo_pt" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="objetivo_pt" id="objetivo_ptMsg" />
+                                            <h:inputTextarea 
+                                                id="objetivo_pt"
+                                                cols="30" rows="10"
+                                                label="Objetivo"
+                                                readonly="true"
+                                                class="form-control"
+                                                value="#{publicacaoController.current.resumo.objective}" 
+                                                required="true" 
+                                                pt:placeholder="Objetivo"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Metodologia: " for="metodologia_pt" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="metodologia_pt" id="metodologia_ptMsg" />
+                                            <h:inputTextarea 
+                                                id="metodologia_pt"
+                                                cols="30" rows="10"
+                                                label="Metodologia"
+                                                class="form-control"
+                                                readonly="true"
+                                                value="#{publicacaoController.current.resumo.methodology}" 
+                                                required="true" 
+                                                pt:placeholder="Metodologia"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Resultados: " for="resultados_pt" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="resultados_pt" id="resultados_ptMsg" />
+                                            <h:inputTextarea 
+                                                id="resultados_pt"
+                                                readonly="true"
+                                                cols="30" rows="10"
+                                                label="Resultados"
+                                                class="form-control"
+                                                value="#{publicacaoController.current.resumo.results}" 
+                                                required="true" 
+                                                pt:placeholder="Resultados"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Conclusão: " for="conclusao_pt" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="conclusao_pt" id="conclusao_ptMsg" />
+                                            <h:inputTextarea 
+                                                id="conclusao_pt"
+                                                cols="30" rows="10"
+                                                label="Conclusão"
+                                                class="form-control"
+                                                readonly="true"
+                                                value="#{publicacaoController.current.resumo.conclusion}" 
+                                                required="true" 
+                                                pt:placeholder="Conclusão"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </p:tab>
+                                <p:tab title="Resumo Secundário" rendered="#{publicacaoController.current.abstract1 != null}">
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Título: " for="title_en" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="title_en" id="title_enMsg" />
+                                            <h:inputTextarea 
+                                                id="title_en"
+                                                label="Title"
+                                                readonly="true"
+                                                class="form-control"
+                                                value="#{publicacaoController.current.abstract1.title}" 
+                                                pt:placeholder="Title"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Introdução: " for="intro_en" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="intro_en" id="intro_enMsg" />
+                                            <h:inputTextarea 
+                                                id="intro_en"
+                                                cols="30" rows="10"
+                                                label="Introduction"
+                                                readonly="true"
+                                                class="form-control"
+                                                value="#{publicacaoController.current.abstract1.intro}" 
+                                                pt:placeholder="Introduction"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Objetivo: " for="objective_en" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="objective_en" id="objective_enMsg" />
+                                            <h:inputTextarea 
+                                                id="objective_en"
+                                                cols="30" rows="10"
+                                                label="Objective"
+                                                readonly="true"
+                                                class="form-control"
+                                                value="#{publicacaoController.current.abstract1.objective}" 
+                                                pt:placeholder="Objective"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Metodologia: " for="methodology_en" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="methodology_en" id="methodology_enMsg" />
+                                            <h:inputTextarea 
+                                                id="methodology_en"
+                                                cols="30" rows="10"
+                                                label="Methodology"
+                                                readonly="true"
+                                                class="form-control"
+                                                value="#{publicacaoController.current.abstract1.methodology}" 
+                                                pt:placeholder="Methodology"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Resultados: " for="results_en" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="results_en" id="results_enMsg" />
+                                            <h:inputTextarea 
+                                                id="results_en"
+                                                cols="30" rows="10"
+                                                label="Results"
+                                                readonly="true"
+                                                class="form-control"
+                                                value="#{publicacaoController.current.abstract1.results}" 
+                                                pt:placeholder="Results"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup class="form-group row">
+                                        <h:outputLabel value="Conclusão: " for="conclusion_en" class="col-sm-2 control-label form-label-right"/>
+                                        <h:panelGroup class="col-sm-6">
+                                            <p:messages for="conclusion_en" id="conclusion_enMsg" />
+                                            <h:inputTextarea 
+                                                id="conclusion_en"
+                                                cols="30" rows="10"
+                                                label="Conclusion"
+                                                readonly="true"
+                                                class="form-control"
+                                                value="#{publicacaoController.current.abstract1.conclusion}" 
+                                                pt:placeholder="Conclusion"/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </p:tab>
+                                
+                            </p:tabView>
+                        </h:panelGroup>    
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>    
+        <ui:define name="title">        
+            #{bundle.SystemName} - #{bundle.CreateAtividadeTitle}   
+        </ui:define>
+    </ui:composition>
+</html>

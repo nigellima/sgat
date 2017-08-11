@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+        <script src="../resources/ckeditor/ckeditor.js"/>
+    </h:head>
+    <h:body>
+<!--        <textarea id="editor1" name="editor1">
+
+        </textarea>
+        <script type="text/javascript">
+            CKEDITOR.replace('editor1', {
+                extraPlugins: 'divarea',
+                customConfig: 'config.js'
+            });
+        </script>-->
+        <script>
+            tinymce.init({
+            selector: '#editor',
+            theme: 'modern',
+            height: 500,
+            plugins: [
+              'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+              'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+              'save table contextmenu directionality template paste textcolor'
+            ],
+            toolbar: 'styleselect | sizeselect fontselect fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor',
+            image_advtab: true,
+            force_br_newlines : true,
+            force_p_newlines : false,
+            forced_root_block : '',
+            fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
+            templates: [
+              { title: 'Test template 1', content: 'Test 1' },
+              { title: 'Test template 2', content: 'Test 2' }
+            ],
+            content_css: [
+              '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+              '//www.tinymce.com/css/codepen.min.css'
+            ]
+           });
+        </script>
+
+        <textarea id="editor" name="editor"></textarea> 
+    </h:body>
+</html>
+

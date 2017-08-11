@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+        
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">            
+            <!--<div class="row">-->
+                <div class="col-md-10 wrapper" id="doc-menu-container" >
+                    <div class="row">
+                        <h:panelGroup id="informationDetailsAtividade" class="panel panel-primary"  layout="block" style="width:110%;margin-left: 0px; padding: 5px">
+                            <div class="panel-heading" style="font-size: 18px">Atividades #{ataController.atividadeListaTipo}</div>
+                            <h:panelGroup class="panel-body">
+                                <h:form id="viewFormAtividade">
+                                    <!--panels in row-->
+                                    
+
+                                    
+                                    <!--content table-->
+                                    #{ataController.atividadesRecuperadas()}
+                                    <div class="row">
+                                        <h:panelGroup class="col-lg-12">
+                                            <h:panelGroup  layout="block" style="font-size: 18px; width: 100%">
+                                                <div id="toolbar">
+                                                    <select class="form-control">
+                                                        <option value="">Exportar Básico</option>
+                                                        <option value="all">Exportar Todos</option>
+                                                        <option value="selected">Exportar Selecionados</option>
+                                                    </select>
+                                                </div>
+                                                <br/>
+                                                <table id="atividades-table" 
+                                                        data-toggle="table"
+                                                        data-show-columns="true"
+                                                        data-show-export="true"
+                                                        data-pagination="true"
+                                                        data-click-to-select="true"
+                                                        data-toolbar="#toolbar"
+                                                        data-show-toggle="true"
+                                                        data-filter-control="true"
+                                                        data-key-events="true"
+                                                        data-url="../resources/data.json"
+                                                        class="table table-hover table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-field="id" data-filter-control="input" data-sortable="true">ID</th>
+                                                            <th data-field="tema" data-filter-control="input" data-sortable="true">Tema</th>
+                                                            <th data-field="data" data-filter-control="input" data-sortable="true">Data</th>
+                                                            <th data-field="finalidade" data-filter-control="input" data-sortable="true">Finalidade</th>
+                                                            <th data-field="tbr" data-filter-control="input" data-sortable="true">Atividade TBR</th>
+                                                            <th data-field="modalidade" data-filter-control="input" data-sortable="true">Modalidade</th>
+                                                            <th data-field="tipo" data-filter-control="input" data-sortable="true">Tipo</th>
+                                                            <th data-field="parts" data-filter-control="input" data-sortable="true">Nº Participantes</th>
+                                                            <th data-field="botao" data-formatter="operateFormatter" data-events="operateEvents"></th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                                <script>
+                                                    var $table = $a('#atividades-table');
+                                                    $a(function () {
+                                                        $a('#toolbar').find('select').change(function () {
+                                                            $table.bootstrapTable('destroy').bootstrapTable({
+                                                                exportDataType: $a(this).val()
+                                                            });
+                                                        });
+                                                        $a($table).bootstrapTable({
+                                                            showFilter: true
+                                                        });
+                                                    })
+                                                    
+                                                    function operateFormatter(value, row, index) {
+                                                        console.log(value);
+                                                        var tagA = '<a class="redirect btn btn-success" href="javascript:void(0)">';
+                                                        return [
+                                                            tagA,
+                                                                '<span class="pull-left">Visualizar Detalhes</span>',
+                                                            '</a>'
+                                                        ].join('');
+                                                    }
+                                                    
+                                                    window.operateEvents = {
+                                                        'click .redirect': function (e, value, row, index) {
+                                                           window.location = "/atividades/view_atividade.xhtml?idAtividade="+value;
+                                                            console.log(value, row, index);
+                                                        }
+                                                    };
+                                                </script>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </div>
+                                </h:form>
+                            </h:panelGroup>    
+                        </h:panelGroup>   
+                    </div>
+                </div>
+            <!--</div>-->
+
+        </ui:define>    
+        <ui:define name="title">        
+            #{bundle.SystemName} - #{bundle.CreateAtividadeTitle}   
+        </ui:define>
+    </ui:composition>
+</html>

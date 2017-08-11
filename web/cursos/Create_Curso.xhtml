@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <h:panelGroup>
+                <h:messages for="formsCreateCurso" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            
+            <h:form id="formsCreateCurso">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header">
+                                Detalhes do Curso
+                            </h1>
+                        </div>
+                    </div>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="ID do Curso no Moodle" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:outputText
+                                class="form-control"
+                                pt:readonly="true"
+                                value="#{cursoController.curso.avaCursoId}">
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Nome" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:outputText
+                                class="form-control"
+                                pt:readonly="true"
+                                value="#{cursoController.curso.tema}">
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Data de Início" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:outputText
+                                class="form-control"
+                                pt:readonly="true"
+                                value="#{cursoController.curso.dataInicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Data de Término" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:outputText
+                                class="form-control"
+                                pt:readonly="true"
+                                value="#{cursoController.curso.dataTermino}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Vagas Ofertadas" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:outputText
+                                class="form-control"
+                                pt:readonly="true"
+                                value="#{cursoController.curso.vagasOfertadas}">
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Código DecS" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:inputText
+                                id="decs"
+                                class="form-control"
+                                required="true"
+                                value="#{cursoController.curso.codDecs}">
+                            </h:inputText>
+                        </h:panelGroup>
+                        <p:commandButton value=" Consultar" class="btn btn-default" style="float:left;" onclick="PF('codigos_decs').show();">
+                        </p:commandButton>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Carga Horária" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:inputText
+                                class="form-control"
+                                required="true"
+                                value="#{cursoController.curso.cargaHoraria}">
+                            </h:inputText>
+                            <h:outputLabel value="em minutos" class="col-sm-4 control-label form-label-right"/>
+                        </h:panelGroup>
+                        
+                    </h:panelGroup>
+                    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="page-header">
+                                Lista de Matriculados
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="container-fluid" style="font-size: 16px">
+                        <div class="row">
+                            <div id="toolbar">
+                                <select class="form-control">
+                                    <option value="">Exportar Básico</option>
+                                    <option value="all">Exportar Todos</option>
+                                    <option value="selected">Exportar Selecionados</option>
+                                </select>
+                            </div>
+                            <br/>
+                            <table id="matriculados-table" 
+                                    data-toggle="table"
+                                    data-show-columns="true"
+                                    data-show-export="true"
+                                    data-pagination="true"
+                                    data-click-to-select="true"
+                                    data-toolbar="#toolbar"
+                                    data-show-toggle="true"
+                                    data-filter-control="true"
+                                    data-key-events="true"
+                                    data-url="../resources/data.json"
+                                    class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th data-field="fullname" data-filter-control="input" data-sortable="true">Nome Completo</th>
+                                        <th data-field="cpf" data-filter-control="input" data-sortable="true">CPF</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <script>
+                                var $table = $a('#matriculados-table');
+                                $a(function () {
+                                    $a('#toolbar').find('select').change(function () {
+                                        $table.bootstrapTable('destroy').bootstrapTable({
+                                            exportDataType: $a(this).val()
+                                        });
+                                    });
+                                    $a($table).bootstrapTable({
+                                        showFilter: true
+                                    });
+                                })
+                            </script>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup class="form-group row">
+                    <h:panelGroup class="col-sm-offset-6">
+                        <h:commandButton value="Importar" action="#{cursoController.persistCourse()}" class="btn btn-primary"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+            
+            <p:dialog header="Descritores Bireme" widgetVar="codigos_decs"  
+                      height="400" width="800"
+                      showEffect="drop" hideEffect="drop"
+                      style="z-index: 10">
+                <ui:include src="../smart/List_CodigosDecS.xhtml"/>    
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>

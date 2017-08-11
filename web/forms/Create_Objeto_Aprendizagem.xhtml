@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <h:panelGroup>
+                <h:messages for="formObjetoApr" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            
+            <h:form id="formObjetoApr">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header">
+                                Criar Objeto de Aprendizagem
+                            </h1>
+                        </div>
+                    </div>
+                    <p:messages id="formMsg" escape="false" style="font-size: 16px"/>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Atividade Relacionada " for="atv_relacionada" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-5">
+                            <p:message  for="atv_relacionada" showSummary="false" showDetail="true" />
+                            <h:inputText 
+                                id="atv_relacionada"
+                                class="form-control"
+                                required="true"
+                                value="#{objetoAprendizagemController.atividade.id}"
+                                pt:placeholder="ID"
+                                pt:readonly="true"/>
+                        </h:panelGroup>
+                        <h:panelGroup class="col-sm-3">
+                            <p:commandLink class="btn btn-primary" value='Buscar' onclick="PF('dlg1').show();"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Tema: " for="tema_central" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-6">
+                            <p:message for="tema_central" showSummary="false" showDetail="true" />
+                            <h:inputText 
+                                id="tema_central"
+                                class="form-control"
+                                required="true"
+                                value="#{objetoAprendizagemController.objeto.tema}"
+                                pt:placeholder="Tema Central"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Código DecS: " for="codigo_decs" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-6">
+                            <p:message for="codigo_decs" showSummary="false" showDetail="true" />
+                            <h:inputText 
+                                id="codigo_decs"
+                                class="form-control"
+                                required="true"
+                                value="#{objetoAprendizagemController.objeto.temaDecs}"
+                                pt:placeholder="Código DecS"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Finalidade: " for="finalidade" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-6">
+                            <p:message for="finalidade" showSummary="false" showDetail="true" />
+                            <h:inputText 
+                                id="finalidade"
+                                class="form-control"
+                                required="true"
+                                value="#{objetoAprendizagemController.objeto.finalidade}"
+                                pt:placeholder="Finalidade"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Tipo: " class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <h:selectOneMenu value="#{objetoAprendizagemController.tipo}" 
+                                            id="tipoObj" class="form-control">
+                               <f:selectItems 
+                                   value="#{objetoAprendizagemController.tipos}" 
+                                   var="item"
+                                   itemLabel="#{item.descricao}"
+                                   itemValue="#{item.id}"
+                                   pt:required="true"/>
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Data de Publicação " for="dt" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="dt" showSummary="false" showDetail="true" />
+                            <h:inputText  
+                                id="dt" 
+                                label="Data" 
+                                class="date-mask date_picker form-control" 
+                                value="#{objetoAprendizagemController.objeto.data}"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Disponibilizado na plataforma de Telessaúde do núcleo? " for="disp_telessaude" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="disp_telessaude" showSummary="false" showDetail="true" />
+                            <p:selectBooleanCheckbox id="disp_telessaude"
+                                                     style="margin-top: 10px; margin-left: 5px;"
+                                                     value="#{objetoAprendizagemController.plataforma}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Disponibilizado no ARES? " for="disp_ares" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="disp_ares" showSummary="false" showDetail="true" />
+                            <p:selectBooleanCheckbox id="disp_ares"
+                                                     style="margin-top: 10px; margin-left: 5px;"
+                                                     value="#{objetoAprendizagemController.areas}"/>
+                        </h:panelGroup>
+
+                        <h:outputLabel value="URL Ares: " for="url_ares" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-6">
+                            <p:message for="url_ares" showSummary="false" showDetail="true" />
+                            <h:inputText 
+                                id="url_ares"
+                                class="form-control"
+                                value="#{objetoAprendizagemController.objeto.urlAres}"
+                                pt:placeholder="URL"/>
+                        </h:panelGroup>
+
+                    </h:panelGroup>
+
+                    <h:panelGroup class="form-group row">
+
+                    </h:panelGroup>
+
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Disponibilizado no AVA-SUS? " for="disp_avasus" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="disp_avasus" showSummary="false" showDetail="true" />
+                            <p:selectBooleanCheckbox id="disp_avasus"
+                                                     style="margin-top: 10px; margin-left: 5px;"
+                                                     value="#{objetoAprendizagemController.avasus}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Disponibilizado em alguma rede social? " for="disp_rede_social" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="disp_rede_social" showSummary="false" showDetail="true" />
+                            <p:selectBooleanCheckbox id="disp_rede_social"
+                                                     style="margin-top: 10px; margin-left: 5px;"
+                                                     value="#{objetoAprendizagemController.redeSoc}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="row">
+                        <div class="alert alert-info" style="font-size: 16px">
+                            <strong>Atenção!</strong> Caso o campo referente à URL do Youtube for preenchido, o SGAT irá automaticamente preencher o valor referente ao número de acessos.
+                        </div>
+                        <h:outputLabel value="URL Youtube: " for="urel_youtube" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-6">
+                            <p:message for="urel_youtube"  showSummary="false" showDetail="true" />
+                            <h:inputText 
+                                id="urel_youtube"
+                                class="form-control"
+                                value="#{objetoAprendizagemController.objeto.urlYoutube}"
+                                pt:placeholder="URL"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Disponibilizado em outro meio? " for="disp_outros" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="disp_outros" showSummary="false" showDetail="true" />
+                            <p:selectBooleanCheckbox id="disp_outros"
+                                                     style="margin-top: 10px; margin-left: 5px;"
+                                                     value="#{objetoAprendizagemController.outros}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Número de Acessos: " for="num_acessos" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <p:message for="num_acessos" showSummary="false" showDetail="true" />
+                            <h:inputText 
+                                id="num_acessos"
+                                class="form-control"
+                                required="true"
+                                value="#{objetoAprendizagemController.objeto.numAcesso}"
+                                pt:placeholder="Número de Acessos"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-offset-6">
+                            <h:commandButton value="Salvar" action="#{objetoAprendizagemController.create()}" class="btn btn-primary" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <p:dialog header="Buscar Atividade Relacionada" widgetVar="dlg1" minHeight="40" width="600">
+                    <h:panelGroup class='row form-group'>
+                        <h:outputLabel value="ID da Atividade:" class="col-sm-3 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:inputText 
+                                id="atv_search"
+                                class="form-control"
+                                value="#{objetoAprendizagemController.atividadeRelacionadaID}" 
+                                pt:placeholder="ID"/>
+                        </h:panelGroup>
+                        <h:panelGroup class="col-sm-4">
+                            <h:commandButton value="Buscar" class="btn btn-primary fa fa-search"
+                                             actionListener="#{objetoAprendizagemController.findAtividadesRelacionadas()}">
+                                <f:ajax execute="atv_search" render="atividadesRelacionadas"/>
+                            </h:commandButton>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <br/>
+                    <h:panelGroup class='row form-group'>
+                        <h:panelGroup class="col-sm-8">
+                            <p:dataTable id="atividadesRelacionadas" var="atv" 
+                                         value="#{objetoAprendizagemController.atvidadesRelacionadas}"
+                                         selectionMode="single"
+                                         selection="#{objetoAprendizagemController.selectedAtividade}"
+                                         rowKey="#{atv.tema}">
+                                <f:facet name="header">
+                                    Atividades
+                                </f:facet>
+                                <p:ajax process="@this" event="rowSelect" listener="#{objetoAprendizagemController.onRowSelect}" onsuccess="PF('dlg1').hide();"
+                                        update=":formObjetoApr:codigo_decs :formObjetoApr:tema_central :formObjetoApr:atv_relacionada"/>
+                                <p:column headerText="Tema">
+                                    <h:outputText value="#{atv.tema}"/>
+                                </p:column>
+                                <p:column headerText="Palestrante">
+                                    <h:outputText value="#{atv.moderador.nome} #{atv.moderador.sobrenome}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </p:dialog>
+                
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

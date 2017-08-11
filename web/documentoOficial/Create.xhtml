@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" >
+    
+<!--    <h:head>
+    </h:head>-->
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">   
+            <br />
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <div class="row">
+                <h:form>
+                    <div id="doc-create-create_recipient" class="panel panel-default col-lg-9" 
+                         style="margin: auto; padding: 5px; display:none">
+                        <h:outputLabel value="Novo Destinatário" for="new-recipient" />
+                        <h:inputText id="new-recipient" styleClass="doc-form-input" style="margin: 10px" value="#{destinatarioController.selected.nome}"></h:inputText>
+                        <h:commandLink
+                            id="btn-create_recipient-submit"
+                            styleClass="fa fa-check"
+                            value=" Salvar"
+                            action="#{destinatarioController.createDestinatarioInDocOficialPage}"
+                            role="button">
+                        </h:commandLink>
+                    </div>
+                </h:form>
+                <h:form id="form-doc">
+                    <h:panelGroup styleClass="panel panel-default col-lg-9" style="border: 1px solid #8699a4">
+                        
+                        <div class="panel-body">
+                            <div id="doc-create-options">
+                                <div class="row">
+                                    <h:selectOneRadio id="tipo" styleClass="doc-tipo" value="#{documentoOficialController.selected.tipo}" title="#{bundle.CreateDocumentoOficialTitle_tipo}">
+                                        <f:selectItem itemValue="1" itemLabel="Memorando" />
+                                        <f:selectItem itemValue="2" itemLabel="Oficio" />
+                                    </h:selectOneRadio>
+                                    <div id="doc-create-setor-group" style="display: inline-block; margin: 10px">
+                                        <h:outputLabel value="Destinatário" for="setores" />
+                                        <h:inputText id="setores" 
+                                             styleClass="doc-form-input"
+                                             style="width: 350px; margin-left: 5px"/>
+                                        
+                                        <a id="btn-add-recipient" class="fa fa-plus-circle"> Adicionar Destinatário</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="text-editor">    
+                                <h:commandLink styleClass="button" style="margin: 10px" id="btn-salvar_doc" action="#{documentoOficialController.create}" value="Salvar" />
+                            
+                                <div id="editor-container" class="panel panel-default col-lg-12">
+                                    <div class="panel-body">
+                                        <ui:include src="Text_editor.xhtml"/>
+                                    </div>
+                                </div>
+                                <!--Memorando template-->
+                                <div id="memorando-template" style="display:none; background-color: red;">
+                                    <div id="header-memo">
+                                        <img style="float: left" src="../resources/img/img_document/logomarcaoficial.jpg" height="80" width="100"/>
+                                        <div id="text-header" align="center" style="text-align: center;float: left;font-size: 18px; width: 62%">
+                                            <font face="times new roman">
+                                                <b>
+                                                     UNIVERSIDADE FEDERAL DO MARANHÃO
+                                                </b><br/>
+                                                <b>
+                                                     HOSPITAL UNIVERSITÁRIO
+                                                </b><br/>
+                                                <b>
+                                                     DIRETORIA DE ENSINO E PESQUISA
+                                                </b><br/>
+                                                <b>
+                                                     NÚCLEO DE TELESSAÚDE
+                                                </b><br/>
+                                                
+                                             </font>
+                                        </div>
+                                        <img class="pull-right" src="../resources/img/img_document/ebserh.jpg" height="80" width="100"/>
+                                    </div>
+                                    <div id="doc-memo-create-number" align="center" style="text-align: center; font-size: 18px" class="undeleteable">
+                                        <font face="times new roman">
+                                            <b>
+                                                <br></br>
+                                                <br></br>
+                                                MEMO NTS-HUUFMA/EBSERH <span>#{documentoOficialController.getCurrentDocNumberAndYear(1)}</span>
+                                                <br></br>
+                                                <br></br>
+                                            </b>
+                                        </font>
+                                    </div>
+                                    <div align="center" style="text-align: left; font-size: 18px" class="undeleteable">
+                                        <font face="times new roman">
+                                            <b>
+                                                DE:
+                                                Núcleo de Telessaúde
+                                                <br></br>
+                                                <div class="doc-recipient">PARA:</div>                                   
+                                                <br></br>
+                                            </b>
+                                        </font>
+                                    </div>
+                                    <div align="center" style="text-align: right; font-size: 18px" id="doc-dt">
+                                        <font face="times new roman">
+                                            <b>
+                                                <div class="date-doc">São Luís, <span>#{documentoOficialController.currentdate}</span></div>
+                                                <br></br>
+                                            </b>
+                                            <br/>
+                                        </font>
+                                    </div>
+                                    <div align="center" style="text-align: left; font-size: 18px">
+                                       <font face="times new roman">
+                                           <span>Atenciosamente,</span>
+                                           <br/>
+                                       </font>
+                                    </div>
+                                    <div align="center" style="text-align: center; font-size: 18px">
+                                        <font face="times new roman">
+                                            <br/>
+                                            <span style="font-size: 16px">Humberto Oliveira Serra</span>
+                                            <br></br>
+                                            Coordenador do Núcleo de Telessaúde
+                                        </font>
+                                    <br></br> 
+                                    </div>
+                                </div>
+                                <!---->
+                                <!--Template for Oficio-->
+                                <div id="oficio-template" style="display:none">
+                                    <div id="header-oficio">
+                                        <img style="float: left" src="../resources/img/img_document/logomarcaoficial.jpg" height="80" width="100"/>
+                                        <div id="text-header" align="center" style="text-align: center;float: left;font-size: 18px; width: 62%">
+                                            <font face="times new roman">
+                                                <b>
+                                                     UNIVERSIDADE FEDERAL DO MARANHÃO
+                                                </b><br/>
+                                                <b>
+                                                     HOSPITAL UNIVERSITÁRIO
+                                                </b><br/>
+                                                <b>
+                                                     DIRETORIA DE ENSINO E PESQUISA
+                                                </b><br/>
+                                                <b>
+                                                     NÚCLEO DE TELESSAÚDE
+                                                </b><br/>
+                                                
+                                             </font>
+                                        </div>
+                                        <img class="pull-right" src="../resources/img/img_document/ebserh.jpg" height="80" width="100"/>
+                                    </div>
+                                    <div id="doc-oficio-create-number" align="center" style="text-align: center; font-size: 18px" class="undeleteable">
+                                        <font face="times new roman">
+                                            <b>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                                OFÍCIO NTS-HUUFMA/EBSERH nº <span>#{documentoOficialController.getCurrentDocNumberAndYear(2)}</span>
+                                                <br></br>
+                                                <br></br>
+                                            </b>
+                                        </font>
+                                    </div>
+                                    <div align="center" style="text-align: left; font-size: 18px" class="undeleteable">
+                                        <font face="times new roman">
+                                            <b>
+                                                DE:
+                                                Núcleo de Telessaúde
+                                                <br></br>
+                                                <div class="doc-recipient">PARA:</div>                                   
+                                                <br></br>
+                                            </b>
+                                        </font>
+                                    </div>
+                                    <div align="center" style="text-align: right; font-size: 18px" id="doc-dt">
+                                        <font face="times new roman">
+                                            <b>
+                                                <div class="date-doc">São Luís, <span>#{documentoOficialController.currentdate}</span></div>
+                                                <br></br>
+                                            </b>
+                                            <br/>
+                                        </font>
+                                    </div>
+                                    <div align="center" style="text-align: left; font-size: 18px">
+                                       <font face="times new roman">
+                                           <span>Atenciosamente,</span>
+                                           <br/>
+                                       </font>
+                                    </div>
+                                    <div align="center" style="text-align: center; font-size: 18px">
+                                        <font face="times new roman">
+                                            <br/>
+                                            <span style="font-size: 16px">Humberto Oliveira Serra</span>
+                                            <br></br>
+                                            Coordenador do Núcleo de Telessaúde
+                                        </font>
+                                    <br></br> 
+                                    </div>
+                                </div>
+                                    
+                            </div>
+                            <br/>                    
+                            <h:inputHidden id="editor-hidden" value="#{documentoOficialController.selected.corpo}" 
+                                           required="true" requiredMessage="#{bundle.CreateDocumentoOficialRequiredMessage_corpo}"/>
+                            <h:inputHidden id="inputHidden-setor" value="#{documentoOficialController.selected.setor}"/>
+                            
+                            <ul id="doc-create-destinatarioList" style="display:none">
+                                <ui:repeat value="#{destinatarioController.items}" var="destinatario">
+                                    <li id="#{destinatario.id}">
+                                        <h:outputText  value="#{destinatario.nome}" escape="false"/>
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                            <br/>
+                        </div>
+                    </h:panelGroup>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>

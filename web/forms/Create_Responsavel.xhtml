@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            
+            <h:form id="formResponsavel" class="lightbox-form" pt:name="formResponsavel">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    <span class="btn fa fa-close" style="float: right;  font-size: 16px;" onclick="hideLightBox('create_responsavel')">  Fechar</span>
+                    <div style="clear: both;"></div>
+                    
+                    <h:panelGroup>
+                        <h:messages for="formResponsavel" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                    </h:panelGroup>
+                    
+                                       
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Instituicao:" for="instituicao" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-10">
+                            <h:message for="instituicao" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                            <h:inputText
+                                id="instituicaoShowName"
+                                class="form-control"
+                                value=""
+                                pt:readonly="true"/>
+                            <h:inputHidden 
+                                id="instituicao"
+                                class="form-control"
+                                value="#{responsavelController.instituicaoId}" 
+                                required="true">
+                            </h:inputHidden>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Pessoa:" for="pessoa" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup style="padding: 0px;" class="col-sm-10" >
+                            <h:panelGroup class="col-sm-10">
+                                <h:inputText
+                                    id="pessoaShowName"
+                                    class="form-control"
+                                    value=""
+                                    pt:placeholder="Selecione uma Pessoa"
+                                    pt:readonly="true"/>
+                                <h:inputHidden 
+                                    id="pessoa"
+                                    class="form-control"
+                                    value="#{responsavelController.responsavel.pessoa}" 
+                                    required="true"
+                                    pt:placeholder="Pessoa">
+                                    <f:converter converterId="pessoaConverter"/>
+                                </h:inputHidden>
+                            </h:panelGroup>
+                            <span class="btn btn-default" style="float:left; display: block;" onclick="showLightBox('list_pessoa');">Escolher</span>
+                            
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Setor:" for="setor" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-8">
+                            <h:message for="setor" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                            <h:inputText 
+                                id="setor"
+                                label="Setor"
+                                class="form-control"
+                                value="#{responsavelController.responsavel.setor}" 
+                                pt:placeholder="Setor" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Ramal:" for="ramal" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-3">
+                            <h:message for="ramal" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                            <h:inputText  
+                                id="ramal" 
+                                label="ramal"
+                                class="form-control form-telefone" 
+                                value="#{responsavelController.responsavel.ramal}"
+                                pt:placeholder="(99) 9999-9999"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-offset-6">
+                            <h:commandButton value="Cadastrar" action="#{responsavelController.saveResponsavel()}" class="btn btn-primary">
+<!--                                <p:ajax update=":formConexao"/>-->
+                            </h:commandButton>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+
+            
+            <h:panelGroup class="lightbox-wrapper" id="list_pessoa">
+                <ui:include src="List_Pessoa.xhtml"/>
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">   
+            <h:panelGroup>
+                <ui:include src="View_Atividade.xhtml"/>
+            </h:panelGroup>
+                
+            <h:panelGroup>
+                <h:messages for="formConexao" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            
+            <h:form id="formConexao">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    <h:panelGroup id="list-conexoes" class="row">
+                        <h:dataTable styleClass="table table-hover table-striped"
+                                     value="#{atividadeController.conexoes}" var="conexao">
+                            <h:column>
+                                <h:panelGroup class="col-md-12">
+                                    <h:outputText 
+                                        class="form-control"
+                                        value="#{conexao.descricao}"
+                                        />
+                                </h:panelGroup>
+                            </h:column>
+                            <h:column>
+                                <h:panelGroup class="col-md-12">
+                                    <h:outputText 
+                                        class="form-control"
+                                        value="#{conexao.sala}"
+                                        />
+                                </h:panelGroup>
+                            </h:column>
+                            <h:column>
+                                <h:panelGroup class="col-sm-12">
+                                    <h:outputLabel 
+                                        class="form-control"
+                                        value="#{conexao.responsavel.instituicao.descricao}" 
+                                        />
+                                </h:panelGroup>
+                            </h:column>
+                            <h:column>
+                                <h:panelGroup class="col-sm-12">
+                                    <h:outputLabel 
+                                        class="form-control"
+                                        value="#{conexao.responsavel.pessoa.nome}" 
+                                        />
+                                </h:panelGroup>
+                            </h:column>
+                            <h:column>
+                                <h:inputHidden id="conexao-id" value="#{conexao.id}"/>
+                                <h:commandLink value="" 
+                                               styleClass="btn btn-danger fa fa-times" 
+                                               action="#{atividadeController.removerPoloRemoto(conexao)}">
+                                    <f:ajax render=":formConexao:list-conexoes" />
+                                </h:commandLink>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Instituição Remota:" for="instituicao" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup style="padding: 0px;"  class="col-sm-8">
+                            <h:panelGroup class="col-sm-10">
+                                <h:message for="instituicao" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                <p:selectOneMenu id="instituicao"
+                                                 value="#{atividadeController.instituicaoId}" style="width: 100%"
+                                                 filter="true" filterMatchMode="contains">
+                                    <p:ajax update="responsavel" event="change" listener="#{atividadeController.setFuncionariosByInstituicao}"/>
+                                    
+                                   
+                                    <f:selectItem itemLabel="Selecione uma Instituicao" pt:selected="true"/>
+                                    <f:selectItems 
+                                        value="#{atividadeController.instituicoes}" 
+                                        var="item"
+                                        itemLabel="#{item.sigla} - #{item.descricao}"
+                                        itemValue="#{item.id}"/>
+                                    
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <span class="btn btn-primary" style="float:right; display: block;" onclick="showLightBox('create_instituicao');">Criar Novo</span>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    #{atividadeController.setFuncionariosByInstituicao()}
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Responsável:" for="responsavel" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup style="padding: 0px;" class="col-sm-8">
+                            <h:panelGroup class="col-sm-10">
+                                <h:message for="responsavel" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                <p:selectOneMenu id="responsavel" 
+                                                 filter="true" filterMatchMode="startsWith"
+                                                 style="width: 100%"
+                                                 value="#{atividadeController.conexao.responsavel}" 
+                                                 valueChangeListener="#{atividadeController.setConexaoByFuncionario}" >
+                                    <p:ajax update="descricao1 descricao2 sala"  event="change"/>
+                                    <f:converter converterId="funcionarioConverter" />
+                                    <f:selectItem itemLabel="Selecione um Responsável" pt:selected="true"/>
+                                    <f:selectItems 
+                                        value="#{atividadeController.funcionarios}" 
+                                        var="item"
+                                        itemLabel="#{item.pessoa.nome} #{item.pessoa.sobrenome}"
+                                        itemValue="#{item}"/>
+                                    <f:validator validatorId="funcionario"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <span class="btn btn-primary" style="float:right; display: block;" onclick="setInstSelected(); showLightBox('create_responsavel'); ">Criar Novo</span>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Conexão:" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-3" rendered="#{atividadeController.video}">
+                            <h:message for="descricao1" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                            <h:inputText 
+                                id="descricao1"
+                                label="descricao1"
+                                class="form-control ip-mask"
+                                value="#{atividadeController.conexao.descricao}" 
+                                pt:placeholder="000.000.000.000"
+                                required="true" />
+                        </h:panelGroup>
+                        <h:panelGroup class="col-sm-6" rendered="#{atividadeController.web}">
+                            <h:message for="descricao2" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                            <h:inputText
+                                id="descricao2"
+                                label="descricao2"
+                                class="form-control"
+                                value="#{atividadeController.conexao.descricao}"
+                                pt:placeholder="http://_________________________"
+                                required="true" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Sala:" for="sala" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <h:message for="sala" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                            <h:inputText 
+                                id="sala"
+                                label="sala"
+                                class="form-control"
+                                value="#{atividadeController.conexao.sala}" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:commandLink value="Adicionar" action="#{atividadeController.guardarPoloRemoto()}" styleClass="btn  btn-success col-sm-offset-1" style="margin-top: 10px; font-size: 16px;">
+                        <i class="fa fa-plus"></i>
+                        <f:ajax execute="instituicao responsavel descricao1 descricao2 sala" render=":formConexao:list-conexoes" />
+                    </h:commandLink>
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-offset-6">
+                            <h:commandButton value="Finalizar Solicitação" action="#{atividadeController.persist()}" class="btn btn-primary" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+            
+            <h:panelGroup class="lightbox-wrapper" id="create_responsavel">
+                <ui:include src="Create_Responsavel.xhtml"/>
+            </h:panelGroup>
+            
+            <h:panelGroup class="lightbox-wrapper" id="create_instituicao">
+                <ui:include src="Create_Instituicao.xhtml"/>
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Cadastrar Profissão"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <div class="row"  style="background: #fff;">
+                <h:panelGroup class="panel panel-default col-lg-8 col-sm-offset-2" style="padding: 5px;">
+                    <div class="panel-heading">
+                        <span style="font-size: 16px;">Cadastrar Profissão</span>
+                        <span class="btn" style="float: right;  margin-bottom: 4px; font-size: 16px;" onclick="hideLightBox('create_prof_saude')">Fechar [x]</span>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="panel-body">   
+                        <h:panelGroup>
+                            <p:messages for="formProfSaude" id="formProfSaudeMsg" />
+                        </h:panelGroup>
+                        <h:form id="formProfSaude">
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="CNS:" for="cns" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="cns" id="cnsMsg" />
+                                    <h:inputText 
+                                        id="cns" 
+                                        label="CNS"
+                                        class="form-control" 
+                                        value="#{presencaController.newProfSaude.cns}" 
+                                        required="true"
+                                        pt:placeholder="CNS" 
+                                        autocomplete="off">
+                                    </h:inputText>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup id="newUbsBox" class="form-group row">
+                                <h:outputLabel value="UBS:" for="newUbs" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-10">
+                                    <p:messages for="newUbs" id="newUbsMsg" />
+                                    <p:selectOneMenu 
+                                                    class="col-sm-10"
+                                                    id="newUbs"
+                                                    value="#{presencaController.newCnesId}" 
+                                                    filter="true" 
+                                                    filterMatchMode="startsWith">
+                                       <f:selectItems 
+                                           value="#{presencaController.ubsList}" 
+                                           var="item"
+                                           itemLabel="#{item.nome}"
+                                           itemValue="#{item.cnes}"/>
+                                   </p:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <br />
+                            <h:panelGroup class="form-group row" style="margin: 5px;">
+                                <h:panelGroup class="col-sm-offset-6">
+                                    <h:commandButton value="Registrar Cadastro" action="#{presencaController.createProfSaude}" class="btn btn-primary" />
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+                </h:panelGroup>    
+            </div>
+        </ui:define>
+    </ui:composition>
+
+</html>

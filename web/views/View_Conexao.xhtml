@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">  
+            #{atividadeController.setSelectedData()}
+            
+            <h:panelGroup id="formConexao" rendered="#{atividadeController.conexoes != null}">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    
+                    <h:column>
+                        <f:facet name="header"></f:facet>
+                        <h:commandLink value=" Editar Lista" action="#{atividadeController.prepareEditConexaoList()}" 
+                                       styleClass="btn btn-primary fa fa-edit" style="font-size: 18px; margin: 5px"/>
+                    </h:column>
+                    <h:dataTable styleClass="table table-hover table-striped"
+                                 value="#{atividadeController.conexoes}" var="conexao" style="font-size: 16px">
+                        <h:column>
+                            <f:facet name="header">Polo Remoto</f:facet>
+                            <h:outputText value="#{conexao.responsavel.instituicao.descricao}"></h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Responsável</f:facet>
+                            <h:outputText 
+                                value="#{conexao.responsavel}">
+                                <f:converter converterId="funcionarioConverter" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Contato</f:facet>
+                            <h:outputText 
+                                value="#{conexao.responsavel.ramal}">
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Descrição</f:facet>
+                            <h:outputText value="#{conexao.descricao}"></h:outputText>
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Sala</f:facet>
+                            <h:outputText value="#{conexao.sala}"></h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header"></f:facet>
+                            <h:commandLink value=" Editar" action="#{atividadeController.prepareEditConexao(conexao)}" 
+                                           styleClass="btn btn-primary fa fa-edit col-sm-offset-1"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>

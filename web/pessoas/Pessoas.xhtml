@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <h:form id="form-list-doc">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages for="form-list-doc" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:outputText escape="false" value="Lista Vazia" rendered="#{pessoaController.items.rowCount == 0}"/>
+                <h:panelGroup class="col-lg-12" layout="block" rendered="#{pessoaController.items.rowCount > 0}">
+                    <!--<h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">-->
+<!--                        <div class="panel-heading">
+                            <span class="btn" style="float: right;" onclick="hideLightBox('list_pessoa')">Fechar [x]</span>
+                            <div style="clear: both;"></div>
+                        </div>-->
+                        <!--<span class="btn btn-primary fa fa-plus fa-1x" style="font-size: 16px; display: block; margin:10px" onclick="showLightBox('create_pessoa'); ">  Cadastrar Pessoa</span>-->
+                        <h:panelGroup class="panel-body">
+                            
+                            <p:dataTable var="item" value="#{pessoaController.lazyModel}" paginator="true" rows="15"
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                         rowsPerPageTemplate="15, 25, 50, 100" selectionMode="single" id="pessoaTable" lazy="true"
+                                         tableStyleClass=""  widgetVar="dataTable">
+                                <p:column headerText="Nome" style="col-lg-2" sortBy="#{item.nome}" filterBy="#{item.nome}" >
+                                    <h:outputText value="#{item.nome}"/>
+                                </p:column>
+                                <p:column headerText="Sobrenome" sortBy="#{item.sobrenome}" filterBy="#{item.sobrenome}">
+                                    <h:outputText value="#{item.sobrenome}"/>
+                                </p:column>
+                                <p:column headerText="Email" sortBy="#{item.email}" filterBy="#{item.email}">
+                                    <h:outputText value="#{item.email}"/>
+                                </p:column>
+                                <p:column headerText="">
+                                    <h:commandButton action="#{pessoaController.viewSelected(item)}" value="Visualizar"></h:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    <!--</h:panelGroup>-->                 
+                </h:panelGroup>
+            </h:form>
+            
+<!--            <h:panelGroup class="lightbox-wrapper" id="create_pessoa">
+                <ui:include src="Create_Pessoa.xhtml"/>
+            </h:panelGroup>-->
+            
+
+        </ui:define>
+    </ui:composition>
+</html>

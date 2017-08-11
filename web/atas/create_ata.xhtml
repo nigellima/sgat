@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <div class="row">
+                <div class="col-md-10 wrapper" id="doc-menu-container" style="float: left;">
+                    #{ataController.setSelectedData()}
+                    
+                    <h:form>
+                        <ui:include src="../views/View_Atividade.xhtml"/>
+                    </h:form>
+                    
+                    <h:form id="instForm">    
+                            <h:panelGroup class="form-group row" >
+                                <h:message for="palestras-mesa-redonda" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                <h:panelGroup id="palestras-mesa-redonda"
+                                              class="panel panel-default col-sm-12" >
+                                    <div class="panel-heading">
+                                        <span style="font-size: 16px;">Instituições participantes</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <p:scrollPanel mode="native" styleClass="row" style="height:200px">
+                                            <h:dataTable value="#{ataController.instituicoesParticipantes}" var="instituicao">
+                                                <h:column>
+                                                    <h:panelGroup class="col-lg-12">
+                                                        <h:outputText 
+                                                            styleClass="form-control"
+                                                            value="#{instituicao.sigla} -  #{instituicao.descricao}"
+                                                            pt:readonly="true"
+                                                            style="margin: 5px"
+                                                            />
+                                                    </h:panelGroup>
+                                                </h:column>
+                                                <h:column>
+                                                    <h:inputHidden id="instituicao-id" value="#{instituicao.id}"/>
+                                                    <h:commandLink value="" 
+                                                                   styleClass="btn btn-danger fa fa-times" 
+                                                                   action="#{ataController.removeInstituicao(instituicao)}">
+                                                        <f:ajax render="instForm:palestras-mesa-redonda viewAtaForm:qtd_pontos" />
+                                                    </h:commandLink>
+                                                </h:column>
+                                            </h:dataTable>
+                                        </p:scrollPanel>
+
+                                        <h:panelGroup class="form-group row">
+                                            <h:outputLabel value="Instituição" for="instituicao" class="col-sm-2 control-label form-label-right"/>
+                                            <h:panelGroup class="col-sm-6">
+                                                <h:message for="instituicao" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                                <p:selectOneMenu id="instituicao"
+                                                                 value="#{ataController.instituicaoId}" style="width: 100%"
+                                                                 filter="true" filterMatchMode="startsWith">
+                                                    <f:selectItem itemLabel="Selecione uma Instituicao" pt:selected="true"/>
+                                                    <f:selectItems 
+                                                        value="#{ataController.instituicoes}" 
+                                                        var="item"
+                                                        itemLabel="#{item.sigla} - #{item.descricao}"
+                                                        itemValue="#{item.id}"/>
+                                                </p:selectOneMenu>
+                                            </h:panelGroup>
+                                            <h:commandLink value="Adicionar" action="#{ataController.guardarInstituicao()}" styleClass="btn  btn-success" style="  margin-bottom: 4px; font-size: 16px;">
+                                                <i class="fa fa-plus"></i>
+                                                <f:ajax execute="instituicao" render="instForm:palestras-mesa-redonda viewAtaForm:qtd_pontos" />
+                                            </h:commandLink>
+                                        </h:panelGroup>
+
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                    </h:form>
+                    <h:form id="viewAtaForm" enctype="multipart/form-data">
+                        
+                        <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px"> 
+                            <div class="panel-heading">
+                                <span style="font-size: 16px;">Arquivos e Informações Adicionais</span>
+                            </div>
+                            <div class="panel-body">
+                                
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Upload da Ata Digitalizada:" class="col-sm-2 control-label form-label-right"/>
+                                    <p:fileUpload fileUploadListener="#{ataController.handleFileUploaded}"
+                                                  class="col-sm-6"
+                                                  mode="advanced"  
+                                                  dragDropSupport="true" 
+                                                  update="messages"
+                                                  fileLimit="1"
+                                                  label="Escolher Arquivo"
+                                                  cancelLabel="Cancelar"
+                                                  uploadLabel="Carregar"/>
+                                    <h:inputText class="form-control lightbox-wrapper" id="fileName" value="#{ataController.fileAta.fileName}" readonly="true" rendered="true"/>
+                                    <p:growl id="messages" showDetail="true" />
+                                </h:panelGroup>   
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Upload da Apresentação de Slides:" class="col-sm-2 control-label form-label-right"/>
+                                    <p:fileUpload fileUploadListener="#{ataController.handleFileUploadedSlides}"
+                                                  class="col-sm-6"
+                                                  mode="advanced"  
+                                                  dragDropSupport="true" 
+                                                  update="messages"
+                                                  fileLimit="1"
+                                                  label="Escolher Arquivo"
+                                                  cancelLabel="Cancelar"
+                                                  uploadLabel="Carregar"/>
+                                    <h:inputText class="form-control lightbox-wrapper" id="fileNameSlide" value="#{ataController.fileAtaSlide.fileName}" readonly="true" rendered="true"/>
+                                </h:panelGroup>   
+                                
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Enviar certificados para participantes: " for="tipo" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-4">
+                                        <p:selectBooleanCheckbox value="#{ataController.sendCertParticipantes}"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Status:" for="status" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-4">
+                                        <h:message for="status" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                        <h:selectOneMenu value="#{ataController.current.status}" id="status" class="form-control">
+                                            <f:converter converterId="statusConverter" />
+                                            <f:selectItems 
+                                                value="#{ataController.statu()}" 
+                                                var="item"
+                                                itemLabel="#{item.descricao}"
+                                                itemValue="#{item}"/>
+                                        </h:selectOneMenu>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Qtd Presentes:" for="qtd_presentes" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-1">
+                                        <h:message for="qtd_presentes" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                        <h:inputText  
+                                            id="qtd_presentes" 
+                                            label="Quantidade de Presentes"
+                                            class="form-control" 
+                                            value="#{ataController.qtdParticipantes}"
+                                            required="true"
+                                            pt:placeholder="0"
+                                            autocomplete="off">
+                                            <f:convertNumber integerOnly="true" />
+                                        </h:inputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Qtd Pontos:" for="qtd_pontos" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-1">
+                                        <h:message for="qtd_pontos" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                        <h:inputText  
+                                            id="qtd_pontos" 
+                                            label="Quantidade de Pontos"
+                                            class="form-control" 
+                                            value="#{ataController.qtdPolos}"
+                                            required="true"
+                                            pt:placeholder="0"
+                                            autocomplete="off">
+                                            <f:convertNumber integerOnly="true" />
+                                        </h:inputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Mais Info:" for="mais_info" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-6">
+                                        <h:message for="mais_info" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                        <h:inputTextarea  
+                                            id="mais_info" 
+                                            label="Mais_Info"
+                                            class="form-control" 
+                                            style="resize: none; height: 100px;" 
+                                            value="#{ataController.ata.maisInfo}"
+                                            pt:placeholder="Mais Info"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                
+                                
+                            </div>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup class="form-group row">
+                            <h:panelGroup class="col-sm-10">
+                                <h:panelGroup class="col-sm-offset-4">
+                                    <h:link outcome="list_atas.xhtml" class="btn btn-danger">Cancelar</h:link>
+                                </h:panelGroup>
+                                <h:panelGroup class="col-sm-offset-4">
+                                    <h:commandButton value="Cadastrar Ata" action="#{ataController.persist()}" class="btn btn-primary"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:form>
+                    
+                </div>
+            </div>
+        </ui:define>    
+        <ui:define name="title">        
+            #{bundle.SystemName} - #{bundle.CreateAtividadeTitle}   
+        </ui:define>
+    </ui:composition>
+</html>

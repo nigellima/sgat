@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Cadastrar Profissão"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <div class="row"  style="background: #fff;">
+                <h:panelGroup class="panel panel-default col-lg-8 col-sm-offset-2" style="padding: 5px;">
+                    <div class="panel-heading">
+                        <span style="font-size: 16px;">Cadastrar Profissão</span>
+                        <span class="btn" style="float: right;  margin-bottom: 4px; font-size: 16px;" onclick="hideLightBox('create_prof_geral')">Fechar [x]</span>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="panel-body">   
+                        <h:panelGroup>
+                            <p:messages for="formProfGeral" id="formProfGeralMsg" />
+                        </h:panelGroup>
+                        <h:form id="formProfGeral">
+                            <h:panelGroup id="newCboBox" class="form-group row">
+                                <h:outputLabel value="CBO:" for="cbo" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-10">
+                                    <p:messages for="cbo" id="cboMsg" />
+                                    <p:selectOneMenu 
+                                                    class="col-sm-10"
+                                                    id="cbo"
+                                                    value="#{presencaController.newCboId}" 
+                                                    filter="true" 
+                                                    filterMatchMode="startsWith">
+                                        <f:selectItems 
+                                           value="#{presencaController.cboList}" 
+                                           var="item"
+                                           itemLabel="#{item.nome}"
+                                           itemValue="#{item.codigo}"/>
+                                   </p:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Estado Residente:" for="estado" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-9">
+                                    <p:messages for="estado" id="estadoMsg" />
+                                    <p:selectOneMenu 
+                                                class="col-sm-5"
+                                                id="estado"
+                                                value="#{presencaController.estadoId}" 
+                                                filter="true" 
+                                                filterMatchMode="startsWith">
+                                        <f:selectItems 
+                                            value="#{presencaController.estadoList}" 
+                                            var="item"
+                                            itemLabel="#{item.descricao}"
+                                            itemValue="#{item.id}"/>
+                                        <p:ajax listener="#{presencaController.updateMunicipioValue()}" update="formProfGeral:municipioBox" />
+                                    </p:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup class="form-group row" id="municipioBox">
+                                <h:outputLabel value="Município Residente:" for="municipio" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-9">
+                                    <p:messages for="municipio" id="municipioMsg" />
+                                    <p:selectOneMenu 
+                                                class="col-sm-9"
+                                                id="municipio"
+                                                value="#{presencaController.municipioId}" 
+                                                filter="true" 
+                                                filterMatchMode="startsWith"
+                                                rendered="#{presencaController.municipioList.size() > 0}">
+                                        <f:selectItems 
+                                            value="#{presencaController.municipioList}" 
+                                            var="item"
+                                            itemLabel="#{item.nome}"
+                                            itemValue="#{item.ibge}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <br />
+                            <h:panelGroup class="form-group row" style="margin: 5px;">
+                                <h:panelGroup class="col-sm-offset-6">
+                                    <h:commandButton value="Registrar Cadastro" action="#{presencaController.createProfGeral}" class="btn btn-primary" />
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+                </h:panelGroup>    
+            </div>
+        </ui:define>
+    </ui:composition>
+
+</html>

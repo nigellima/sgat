@@ -1,0 +1,308 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+ 
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>SGAT-MA</title>
+        <h:outputScript name="jquery/jquery-2.1.4.min.js" />
+        <h:outputScript name="jquery-ui/jquery-ui.min.js" />
+        <h:outputStylesheet name="jquery-ui/jquery-ui.min.css" />
+       
+        <!--<link rel="stylesheet" type="text/css" href="../resources/bootstrap/css/bootstrap.min.css"/>-->
+        <!--<h:outputStylesheet library="bootstrap/css" name="bootstrap.min.css" />-->
+        <h:outputStylesheet name="bootstrap/css/bootstrap.min.css" />
+        <h:outputStylesheet name="bootstrap/bootstrap-table/src/bootstrap-table.css" />
+       
+        <h:outputStylesheet name="metisMenu/dist/metisMenu.css" />
+        
+       
+        <h:outputStylesheet name="font-awesome-4.4.0/css/font-awesome.css" />
+        
+       
+        <h:outputStylesheet name="css/kendo/kendo.common.min.css" />
+       
+        <h:outputStylesheet name="css/kendo/kendo.default.min.css" />        
+       
+        <h:outputStylesheet name="css/kendo/kendo.rtl.min.css" />
+       
+        <h:outputStylesheet name="bootstrap/bootstrap-lightbox/bootstrap-lightbox.css" />
+       
+        <h:outputStylesheet name="ckeditor/contents.css" />
+       
+        <!--<h:outputScript library="bootstrap/js" name="bootstrap.min.js" />-->
+        <h:outputScript name="bootstrap/js/bootstrap.min.js" />
+        <h:outputScript name="bootstrap/bootstrap-table/src/bootstrap-table.js" />
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/locale/bootstrap-table-pt-BR.min.js"></script>
+        <h:outputStylesheet name="bootstrap/bootstrap-table/src/bootstrap-table.css" />
+        <h:outputScript name="bootstrap/bootstrap-table/src/extensions/export/bootstrap-table-export.js" />
+        <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+        <h:outputScript name="bootstrap/bootstrap-table/src/extensions/filter-control/bootstrap-table-filter-control.js" />
+        <h:outputScript name="bootstrap/bootstrap-table/ga.js" />
+        
+       
+        <h:outputScript name="metisMenu/dist/metisMenu.min.js" />
+       
+        <h:outputScript name="bootstrap/bootstrap-lightbox/bootstrap-lightbox.js" />
+        <h:outputScript name="js/kendo.all.min.js" />        
+        <h:outputScript name="js/html2canvas.js" />
+        
+        <h:outputScript name="js/jsPDF/jspdf.js" />
+        <h:outputScript name="js/jsPDF/plugins/addhtml.js" />
+        <h:outputScript name="js/jsPDF/plugins/from_html.js" />
+        <h:outputScript name="js/jsPDF/plugins/cell.js" />
+        <h:outputScript name="js/jsPDF/plugins/addimage.js" />
+        <h:outputScript name="js/jsPDF/plugins/split_text_to_size.js" />
+        <h:outputScript name="js/jsPDF/plugins/standard_fonts_metrics.js" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        
+        <h:outputScript name="js/dashboard.js" />
+        
+        
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.9/datatables.min.css"/> 
+        <script type="text/javascript" src="https://cdn.datatables.net/r/dt/dt-1.10.9/datatables.min.js"></script>
+        <script type="text/javascript" src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/dataTables.bootstrap.min.js"></script>
+        
+        
+        <h:outputStylesheet name="datepicker/css/datepicker.css"/>
+        <h:outputScript name="datepicker/js/bootstrap-datepicker.js" />
+        
+        <h:outputStylesheet name="css/standard.css" />
+        <h:outputStylesheet  name="css/calendar.css" />
+        <h:outputStylesheet  name="css/sb-admin.css" />
+        
+        <h:outputStylesheet name="css/fluxogram.css" />
+        
+        <h:outputScript  name="jquery-mp/dist/jquery.mask.min.js" />
+        <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/heatmap.js/heatmap.js-master/build/heatmap.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/heatmap.js/heatmap.js-master/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
+        
+        <style type="text/css">
+           
+        </style> 
+        
+    </h:head>
+    <h:body style=" font-family: exo">
+         <div id="wrapper">
+
+        <!-- Navigation -->
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                    <h:form>
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <h:link 
+                                class="link-oficios"
+                                value="SGAT - SISTEMA DE GERENCIAMENTO DE ATIVIDADES DE TELE-EDUCAÇÃO DO NÚCLEO DE TELESSAÚDE-MA"
+                                outcome="/public/home"
+                                role="button"
+                                styleClass="navbar-brand">
+                            </h:link>
+                            
+                        </div>
+                        <!-- Top Menu Items -->
+                        <ul class="nav navbar-right top-nav">
+
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> #{loginController.pessoa.nome} #{loginController.pessoa.sobrenome} <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+
+                                    <li>
+                                        <a href="#"><i class="fa fa-fw fa-gear"></i> Editar Perfil</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <h:commandLink 
+                                            class="btn-logout fa fa-power-off "
+                                            value=" Sair"
+                                            action="#{loginController.logOut}"
+                                            role="button" />
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </h:form>
+                    <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+                    <div class="collapse navbar-collapse navbar-ex1-collapse">
+                        <h:form>
+                        <ul class="nav navbar-nav side-nav" style="font-size: 18px">
+                           
+                                <li>
+                                    <h:graphicImage class="center-block" style="margin:  20px;" value="/resources/img/logomarcaoficial_white.png" width="130" height="120"/>
+                                </li>
+                                <li class="divider"></li>
+                                <li >
+                                    <h:commandLink 
+                                        class="link-agenda fa fa-home "
+                                        value=" #{bundle.MenuTitle_DashBoard}"
+                                        action="/public/home"
+                                       role="button">
+                                   </h:commandLink>
+                                </li>
+                                <li>
+                                    <h:commandLink 
+                                        class="link-agenda fa fa-calendar"
+                                        value=" #{bundle.MenuTitle_Agenda}"
+                                        action="/public/agenda"
+                                       role="button">
+                                    </h:commandLink>
+                                </li>
+                                <li>
+                                    <h:commandLink 
+                                        class="link-formularios fa fa-list-alt"
+                                        value=" #{bundle.MenuTitle_Forms}"
+                                        action="#{atividadeController.prepareCreate}"
+                                       role="button">
+                                   </h:commandLink>
+                                </li>
+                                
+                                <li>
+                                    <a href="javascript:;" data-toggle="collapse" data-target="#objetos-submenu" ><i class="fa fa-fw fa-youtube-play"></i> Objetos <i class="fa fa-fw fa-caret-down"></i></a>
+                                    <ul id="objetos-submenu" class="collapse">
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-file-text-o"
+                                                value=" Novo"
+                                                action="#{objetoAprendizagemController.prepareCreate}"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-list-ol"
+                                                value=" Listar"
+                                                action="/forms/view_list_objeto_aprendizagem.xhtml"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="display: none">
+                                    <a href="javascript:;" data-toggle="collapse" data-target="#cursos-submenu" ><i class="fa fa-fw fa-book"></i> Cursos <i class="fa fa-fw fa-caret-down"></i></a>
+                                    <ul id="cursos-submenu" class="collapse">
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-file-text-o"
+                                                value=" Novo"
+                                                action="#{cursoController.prepareImport()}"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-list-ol"
+                                                value=" Listar"
+                                                action="#"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                <li>
+                                    <a href="javascript:;" data-toggle="collapse" data-target="#publicacoes-submenu" ><i class="fa fa-fw fa-mortar-board"></i> Publicações <i class="fa fa-fw fa-caret-down"></i></a>
+                                    <ul id="publicacoes-submenu" class="collapse">
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-file-text-o"
+                                                value=" Novo"
+                                                action="/publications/view_create_publicacao.xhtml"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-list-ol"
+                                                value=" Listar"
+                                                action="/publications/view_list_publication.xhtml"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                <li>
+                                    <a href="javascript:;" data-toggle="collapse" data-target="#cadastros-submenu"><i class="fa  fa-list-alt"></i> Cadastros  <i class="fa fa-fw fa-caret-down"></i></a>
+                                    <ul id="cadastros-submenu" class="collapse">
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-file-text-o"
+                                                value=" Novo"
+                                                action="#{pessoaController.prepareCreate}"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-list-ol"
+                                                value=" Listar"
+                                                action="/cadastros/index.xhtml"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" data-toggle="collapse" data-target="#documento-submenu"><i class="fa  fa-envelope-o"></i> Memo/Ofício  <i class="fa fa-fw fa-caret-down"></i></a>
+                                    <ul id="documento-submenu" class="collapse">
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-file-text-o"
+                                                value=" Novo"
+                                                action="#{documentoOficialController.prepareCreate}"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                        <li>
+                                            <h:commandLink 
+                                                class="fa fa-list-ol"
+                                                value=" Listar"
+                                                action="#{documentoOficialController.prepareList}"
+                                                role="button">
+                                            </h:commandLink>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h:commandLink 
+                                        class="link-agenda fa fa-upload"
+                                        value=" SMART"
+                                        action="/smart/view_smart"
+                                       role="button">
+                                   </h:commandLink>
+                                </li>
+                           
+                        </ul>
+                             </h:form>
+                    </div>
+                <!-- /.navbar-collapse -->
+                
+            </nav>
+
+            <div id="page-wrapper">
+
+                <div class="container" >
+                    <ui:insert name="container">
+
+                    </ui:insert>
+                </div>
+            <!-- /#page-wrapper -->
+
+            </div>
+        </div>
+    </h:body>
+</html>

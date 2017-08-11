@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+    <!--index page-->
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="/public/initial_template.xhtml">
+        <ui:define name="container">
+            <div class="title_ right_">
+                Registro de Presença
+            </div>
+            
+            <h:form id="searchRegistro">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                     <h:panelGroup class="form-group row">
+                         <h:panelGroup class="col-sm-10">
+                            <h:outputLabel value="Modalidade:" for="modalidade" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-3">
+                                <h:inputText 
+                                    id="modalidade" 
+                                    label="Modalidade"
+                                    class="form-control" 
+                                    value="#{presencaController.atividade.modalidade.descricao}" 
+                                    pt:placeholder="Modalidade" 
+                                    readonly="true">
+                                </h:inputText>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                         <h:panelGroup class="col-sm-10">
+                            <h:outputLabel value="Tipo:" for="tipo" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-3">
+                                <h:inputText 
+                                    id="tipo" 
+                                    label="Tipo"
+                                    class="form-control" 
+                                    value="#{presencaController.atividade.tipo.descricao}" 
+                                    pt:placeholder="Tipo" 
+                                    readonly="true">
+                                </h:inputText>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        <h:panelGroup class="col-sm-10">
+                            <h:outputLabel value="Tema:" for="tema" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-10">
+                                <h:inputText 
+                                    id="tema" 
+                                    label="Tema"
+                                    class="form-control" 
+                                    value="#{presencaController.atividade.tema}" 
+                                    pt:placeholder="Tema" 
+                                    readonly="true">
+                                </h:inputText>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-10">
+                            <h:outputLabel value="CPF/CNS/EMAIL:" for="search_tag" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-3">
+                                <h:inputText 
+                                    id="search_tag" 
+                                    label="CPF, CNS ou EMAIL"
+                                    class="form-control" 
+                                    value="#{presencaController.search_tag}" 
+                                    required="true"
+                                    pt:placeholder="CPF, CNS ou EMAIL" 
+                                    autocomplete="off">
+                                </h:inputText>
+                                <p:messages for="search_tag" id="search_tagMsg" />
+                            </h:panelGroup>
+                            <h:commandLink value=" Procurar" action="#{presencaController.getRecord()}" class="btn btn-primary" style="text-decoration: none;"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+            
+            <h:panelGroup id="update">
+                <h:panelGroup>
+                    <p:messages for="formConfirm" id="formConfirmMsg" />
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{!presencaController.personFound and presencaController.searched}">
+                    <span class="btn btn-default" style="float:left; margin-bottom: 20px;" onclick="showLightBox('create_pessoa'); ">Cadastrar Pessoa..</span>
+                </h:panelGroup>
+                
+                <h:panelGroup rendered="#{presencaController.personFound and presencaController.profGeral==null and presencaController.searched}">
+                    <span class="btn btn-default" style="float:left; margin-bottom: 20px;" onclick="showLightBox('create_prof_geral'); ">Cadastrar Profissão..</span>
+                </h:panelGroup>
+                
+                <h:panelGroup rendered="#{presencaController.personFound and presencaController.profGeral!=null and presencaController.profSaude==null and presencaController.searched}">
+                    <span class="btn btn-default" style="float:left; margin-bottom: 20px;" onclick="showLightBox('create_prof_saude'); ">Cadastrar Vínculo..</span>
+                </h:panelGroup>
+
+                <h:panelGroup class="lightbox-wrapper" id="create_pessoa" style="background: #fff;">
+                    <ui:include src="create_pessoa.xhtml"/>
+                </h:panelGroup>
+                
+                <h:panelGroup class="lightbox-wrapper" id="create_prof_geral" style="background: #fff;">
+                    <ui:include src="create_prof_geral.xhtml"/>
+                </h:panelGroup>
+                
+                <h:panelGroup class="lightbox-wrapper" id="create_prof_saude" style="background: #fff;">
+                    <ui:include src="create_prof_saude.xhtml"/>
+                </h:panelGroup>
+                
+                <div style="clear: both;"></div>
+            </h:panelGroup>
+            
+            <h:form id="formConfirm" onsubmit="return false;" >
+                
+                
+                
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px" rendered="#{presencaController.pessoa!=null}">
+                    <h:panelGroup>
+                        <span class="caption_">Por favor, selecione seu local de acesso!</span>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-10">
+                            <h:outputLabel value="Local de Acesso:" for="estado" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-9">
+                                <h:panelGroup class="col-sm-4">
+                                    <p:selectOneMenu 
+                                                id="estado"
+                                                value="#{presencaController.estadoId}" 
+                                                filter="true" 
+                                                filterMatchMode="startsWith">
+                                        
+                                        <f:selectItem itemValue="#{0}" itemLabel="..." pt:selected="true"/>
+                                        <f:selectItems 
+                                            value="#{presencaController.estadoList}" 
+                                            var="item"
+                                            itemLabel="#{item.descricao}"
+                                            itemValue="#{item.id}"/>
+                                        <p:ajax listener="#{presencaController.updateMunicipioValue()}" update="formConfirm:municipioBox" />
+                                    </p:selectOneMenu>
+                                    <p:messages for="estado" id="estadoMsg" />
+                                </h:panelGroup>
+                                <h:panelGroup class="col-sm-4" id="municipioBox">
+                                    <p:selectOneMenu 
+                                                id="municipio"
+                                                value="#{presencaController.municipioId}" 
+                                                filter="true" 
+                                                filterMatchMode="startsWith"
+                                                rendered="#{presencaController.municipioList.size() > 0}">
+                                        <f:selectItem itemValue="#{0}" itemLabel="..." pt:selected="true"/>
+                                        <f:selectItems 
+                                            value="#{presencaController.municipioList}" 
+                                            var="item"
+                                            itemLabel="#{item.nome}"
+                                            itemValue="#{item.ibge}"/>
+                                    </p:selectOneMenu>
+                                    <p:messages for="municipio" id="municipioMsg" />
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+<!--                        
+                        <h:panelGroup class="col-sm-10">
+                            <h:outputLabel value="Endereço IP:" for="ipAddress" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-9">
+                                <h:panelGroup class="col-sm-4">
+                                    <p:messages for="ip" id="ipMsg" />
+                                    <h:inputText 
+                                        id="ipAddress" 
+                                        label="IP"
+                                        class="form-control" 
+                                        value="#{presencaController.IPaddress}" 
+                                        required="true"
+                                        pt:placeholder="IP" 
+                                        autocomplete="off"
+                                        readonly="true">
+                                    </h:inputText>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>-->
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px" rendered="#{presencaController.pessoa!=null}">
+                    <h:panelGroup>
+                        <span class="caption_">Por favor, confirme seus dados pessoais!</span>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-10">
+                            <h:outputLabel value="Nome:" for="nome" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-2">
+                                <p:messages for="nome" id="nomeMsg" />
+                                <h:inputText 
+                                    id="nome" 
+                                    label="Nome"
+                                    class="form-control" 
+                                    value="#{presencaController.pessoa.nome}" 
+                                    required="true"
+                                    pt:placeholder="Nome" 
+                                    autocomplete="off">
+                                </h:inputText>
+                            </h:panelGroup>
+                            <h:outputLabel value="Sobrenome:" for="sobrenome" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-4">
+                                <p:messages for="sobrenome" id="sobrenomeMsg" />
+                                <h:inputText 
+                                    id="sobrenome" 
+                                    label="Sobrenome"
+                                    class="form-control" 
+                                    value="#{presencaController.pessoa.sobrenome}" 
+                                    required="true"
+                                    pt:placeholder="Sobrenome" 
+                                    autocomplete="off">
+                                </h:inputText>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-10">
+                            <h:outputLabel value="CPF:" for="cpf" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-3">
+                                <p:messages for="cpf" id="cpfMsg" />
+                                <h:inputText 
+                                    id="cpf" 
+                                    label="CPF"
+                                    class="form-control" 
+                                    value="#{presencaController.pessoa.cpf}" 
+                                    required="true"
+                                    pt:placeholder="CPF" 
+                                    autocomplete="off">
+                                </h:inputText>
+                            </h:panelGroup>
+                            <h:outputLabel value="Celular:" for="celular" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-3">
+                                <h:inputText 
+                                    id="celular" 
+                                    label="Celular"
+                                    class="form-control" 
+                                    value="#{presencaController.pessoa.celular}" 
+                                    required="false"
+                                    pt:placeholder="Celular" 
+                                    autocomplete="off">
+                                </h:inputText>
+                                <p:messages for="celular" id="celularMsg" />
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-10">
+                            <h:outputLabel value="Email:" for="email" class="col-sm-2 control-label form-label-right"/>
+                            <h:panelGroup class="col-sm-4">
+                                <h:inputText 
+                                    id="email" 
+                                    label="Email"
+                                    class="form-control" 
+                                    value="#{presencaController.pessoa.email}" 
+                                    required="true"
+                                    pt:placeholder="Email" 
+                                    autocomplete="off">
+                                </h:inputText>
+                                <p:messages for="email" id="emailMsg" />
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px" rendered="#{presencaController.profGeral!=null}">
+                    <h:panelGroup>
+                        <span class="caption_">Por favor, confirme dados de profissão!</span>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="CBO:" for="cbo" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-10" style="margin-left: -15px;">
+                            <p:messages for="cbo" id="cboMsg" />
+                            <h:panelGroup class="col-sm-6">
+                                <h:inputText 
+                                    id="cbo" 
+                                    label="CBO"
+                                    class="form-control" 
+                                    value="#{presencaController.profGeral.cbo.nome}" 
+                                    required="true"
+                                    pt:placeholder="CBO" 
+                                    autocomplete="off"
+                                        readonly="true">
+                                </h:inputText>
+                            </h:panelGroup>
+                            <h:commandLink value="Alterar" action="#{presencaController.setCboUpdate(true)}" class="btn btn-primary" style="text-decoration: none;"/>
+                        </h:panelGroup>   
+                    </h:panelGroup> 
+
+                    <h:panelGroup id="newCboBox" class="form-group row" rendered="#{presencaController.cboUpdate}" >
+                        <h:outputLabel value="Novo CBO:" for="newCbo" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-10">
+                            <p:messages for="newCbo" id="newCboMsg" />
+                            <p:selectOneMenu 
+                                            id="newCbo"
+                                            value="#{presencaController.cboId}" 
+                                            filter="true" 
+                                            filterMatchMode="startsWith">
+                               <f:selectItems 
+                                   value="#{presencaController.cboList}" 
+                                   var="item"
+                                   itemLabel="#{item.nome}"
+                                   itemValue="#{item.codigo}"/>
+                               <p:ajax listener="#{presencaController.updateCboValue()}" update="formConfirm:cbo" />
+                           </p:selectOneMenu>
+                        </h:panelGroup>
+                    </h:panelGroup> 
+                </h:panelGroup>  
+                
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px" rendered="#{presencaController.profSaude!=null}">
+                    <h:panelGroup>
+                        <span class="caption_">Por favor, confirme dados de vínculo profissional de saúde!</span>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="CNS:" for="cns" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            <p:messages for="cns" id="cnsMsg" />
+                            <h:inputText 
+                                id="cns" 
+                                label="CNS"
+                                class="form-control" 
+                                value="#{presencaController.profSaude.cns}" 
+                                required="true"
+                                pt:placeholder="CNS" 
+                                autocomplete="off">
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="UBS:" for="ubs" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-10" style="margin-left: -15px;">
+                            <p:messages for="ubs" id="ubsMsg" />
+                            <h:panelGroup class="col-sm-7">
+                                <h:inputText 
+                                    id="ubs"
+                                    label="UBS"
+                                    class="form-control" 
+                                    value="#{presencaController.profSaude.ubs.nome}" 
+                                    required="true"
+                                    pt:placeholder="UBS" 
+                                    autocomplete="off"
+                                    readonly="true">
+                                </h:inputText>
+                            </h:panelGroup>   
+                            <h:commandLink value="Alterar" action="#{presencaController.setUbsUpdate(true)}" class="btn btn-primary" style="text-decoration: none;"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="newUbsBox" class="form-group row" rendered="#{presencaController.ubsUpdate}" >
+                        <h:outputLabel value="Nova UBS:" for="newUbs" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-10">
+                            <p:messages for="newUbs" id="newUbsMsg" />
+                            <p:selectOneMenu 
+                                            id="newUbs"
+                                            value="#{presencaController.ubsId}" 
+                                            filter="true" 
+                                            filterMatchMode="startsWith">
+                               <f:selectItems 
+                                   value="#{presencaController.ubsList}" 
+                                   var="item"
+                                   itemLabel="#{item.nome}"
+                                   itemValue="#{item.cnes}"/>
+                               <p:ajax listener="#{presencaController.updateUbsValue()}" update="formConfirm:ubs" />
+                           </p:selectOneMenu>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup class="form-group row">
+                    <h:panelGroup class="col-sm-offset-8">
+                        <h:commandLink rendered="#{presencaController.searched and presencaController.personFound}" value="Confirmar Presença" action="#{presencaController.confirmPresence()}" class="btn btn-primary" style="margin-right: 10px;"/>
+                        <h:commandLink value="Sair" action="#{presencaController.logout()}" class="btn btn-primary"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+        </ui:define>    
+        <ui:define name="title">        
+            SINTS - Sistema Integrado Telessaúde MA       
+        </ui:define>
+    </ui:composition>
+</html>

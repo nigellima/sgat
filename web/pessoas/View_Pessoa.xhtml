@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundlePessoa.CreatePessoaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <div class="row">
+                <h:panelGroup class="panel panel-default col-lg-8 col-lg-offset-12" style="padding: 5px; margin: 0px auto;">
+                    <div class="panel-heading">
+                        <span style="font-size: 16px;">Dados Pessoais</span>
+                    </div>
+                    <div class="panel-body">   
+                         <h:panelGroup>
+                            <p:messages for="formPessoa" id="formProfGeralMsg" />
+                        </h:panelGroup>
+                        <h:form id="formPessoa"> 
+                            
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel class="control-label col-md-2 form-label-right" 
+                                               value="#{bundlePessoa.CreatePessoaLabel_nome}" for="nome" />
+                                <h:message for="nome" class="formPessoaMessage" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                <h:panelGroup class="col-sm-8">
+                                    <h:inputText class="form-control form-nome" 
+                                                 pt:placeholder="Ex: Maria" 
+                                                 id="nome"
+                                                 value="#{pessoaController.selected.nome}" 
+                                                 title="#{bundlePessoa.CreatePessoaTitle_nome}"
+                                                 required="true" 
+                                                 requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_nome}"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel  class="control-label col-md-2 form-label-right" 
+                                                value="#{bundlePessoa.CreatePessoaLabel_sobrenome}" for="sobrenome" />
+                                <h:message for="sobrenome" class="formPessoaMessage" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                <h:panelGroup class="col-sm-8">
+                                    <h:inputText id="sobrenome"  
+                                                  pt:placeholder="Ex: da Silva" 
+                                                 class="form-control form-sobrenome"
+                                                 value="#{pessoaController.selected.sobrenome}" 
+                                                 title="#{bundlePessoa.CreatePessoaTitle_sobrenome}" 
+                                                 required="true" 
+                                                 requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_sobrenome}"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel class="control-label col-md-2 form-label-right" value="#{bundlePessoa.CreatePessoaLabel_cpf}" for="cpf" />
+                                <h:message for="cpf" class="formPessoaMessage" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                <h:panelGroup class="col-sm-8">
+                                    <h:inputText id="cpf" 
+                                                 pt:placeholder="Apenas números" 
+                                                 class="form-control col-sm-2 form-cpf"
+                                                 value="#{pessoaController.selected.cpf}"
+                                                 title="#{bundlePessoa.CreatePessoaTitle_cpf}"  
+                                                 required="true"
+                                                 requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_cpf}"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel class="control-label col-md-2 form-label-right" value="#{bundlePessoa.CreatePessoaLabel_email}" for="email" />
+                                <h:message for="email" class="formPessoaMessage" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                <h:panelGroup class="col-sm-8">
+                                    <h:inputText id="email" 
+                                                 pt:placeholder="usuario@exemplo.com" 
+                                                 class="form-control col-sm-2 form-email" 
+                                                 value="#{pessoaController.selected.email}"
+                                                 title="#{bundlePessoa.CreatePessoaTitle_email}" 
+                                                 required="true"
+                                                 requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_email}">
+                                    </h:inputText>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel class="control-label col-md-2 form-label-right" value="#{bundlePessoa.CreatePessoaLabel_celular}" for="celular" />
+                                <h:message for="celular" class="formPessoaMessage" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                                <h:panelGroup class="col-sm-8">
+                                    <h:inputText id="celular"
+                                                 pt:placeholder="(99) 99999-9999" 
+                                                 class="form-control col-sm-2 form-cellphone"
+                                                 value="#{pessoaController.selected.celular}" 
+                                                 title="#{bundlePessoa.CreatePessoaTitle_celular}" 
+                                                 requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_celular}"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel class="control-label col-md-2 form-label-right" value="#{bundlePessoa.CreatePessoaLabel_sexo}" for="sexo" />
+                                <h:panelGroup class="col-sm-8">
+                                    <h:selectOneMenu id="sexo" 
+                                                     class="form-control col-sm-2"
+                                                     value="#{pessoaController.selected.sexo}" 
+                                                     title="#{bundlePessoa.CreatePessoaTitle_sexo}" 
+                                                     required="true" 
+                                                     requiredMessage="#{bundlePessoa.CreatePessoaRequiredMessage_sexo}">
+                                        <f:selectItem itemValue="M" itemLabel="Masculino" />
+                                        <f:selectItem itemValue="F" itemLabel="Feminino" />
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <br />
+                            <h:panelGroup class="form-group row" style="margin: 5px;">
+                                <h:panelGroup class="col-sm-offset-6">
+                                    <h:commandButton value="Atualizar" action="#{pessoaController.update()}" class="btn btn-primary" />
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+                </h:panelGroup>    
+            </div>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">   
+
+            <h:panelGroup>
+                <h:messages for="formAtividade" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+
+            <h:form id="formAtividade">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Modalidade:" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-3">
+                            <h:outputText 
+                                class="form-control"
+                                value="#{atividadeController.atividade.modalidade}">
+                                <f:converter converterId="modalidadeConverter" />
+                            </h:outputText>
+                        </h:panelGroup>
+                        <h:outputLabel value="Tipo:" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-4">
+                            <h:outputText 
+                                class="form-control"
+                                value="#{atividadeController.atividade.tipo}">
+                                <f:converter converterId="tipoConverter" />
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Tema Central:" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-8">
+                            <h:outputText 
+                                class="form-control"
+                                value="#{atividadeController.atividade.tema}" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Código DecS: " class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-8">
+                            <h:outputText 
+                                class="form-control"
+                                value="#{atividadeController.atividade.codDecs}" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Data:" class="col-sm-2 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <h:outputText 
+                                class="form-control"
+                                value="#{atividadeController.atividade.dt}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                        <h:outputLabel value="Início:" class="col-sm-1 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <h:outputText 
+                                class="form-control"
+                                value="#{atividadeController.atividade.hrInicio}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                        <h:outputLabel value="Término:" class="col-sm-1 control-label form-label-right" />
+                        <h:panelGroup class="col-sm-2">
+                            <h:outputText 
+                                class="form-control"
+                                value="#{atividadeController.atividade.hrTermino}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

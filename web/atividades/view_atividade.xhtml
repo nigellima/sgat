@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    <ui:composition template="../public/template_master.xhtml">
+        
+        <ui:define name="container">
+            <div class="row">
+                <div class="col-md-10 wrapper" id="doc-menu-container" style="float: left;">
+                    #{ataController.setSelectedData()}
+                    
+                    <h:form>
+                        <ui:include src="../views/View_Atividade.xhtml"/>
+                        
+                        <ui:include src="../views/View_Conexao.xhtml"/>
+                        <h:panelGroup class="form-group row" rendered="#{atividadeController.isPendente(atividadeController.current)}">
+                            <h:panelGroup class="col-sm-10">
+                                <h:panelGroup class="col-sm-offset-4">
+                                    <h:commandButton value="Cancelar" action="#{solicitacaoController.cancelar(atividadeController.current)}" 
+                                                     class="btn btn-primary"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:form>
+                </div>
+            </div>
+        </ui:define>    
+        <ui:define name="title">        
+            #{bundle.SystemName} - #{bundle.CreateAtividadeTitle}   
+        </ui:define>
+    </ui:composition>
+</html>

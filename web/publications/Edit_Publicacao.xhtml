@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <h:panelGroup>
+                <p:message for="formArtigo"  showSummary="false" showDetail="true"/>
+            </h:panelGroup> 
+            
+            <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header">
+                                Criar Artigo
+                            </h1> 
+                       </div>
+                    </div>
+                <h:form enctype="multipart/form-data">
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Upload do Artigo Completo (opcional):" class="col-sm-2 control-label form-label-right"/>
+                        <p:fileUpload fileUploadListener="#{publicacaoController.handleFileUploadedSlide}"
+                                                  class="col-sm-6"
+                                                  mode="advanced"  
+                                                  dragDropSupport="true" 
+                                                  update="messages"
+                                                  fileLimit="1"
+                                                  label="Escolher Arquivo"
+                                                  cancelLabel="Cancelar"
+                                                  uploadLabel="Carregar"/>
+                        <h:inputText class="form-control lightbox-wrapper" id="fileNameSlide" value="#{publicacaoController.filePaper.fileName}" readonly="true" rendered="true"/>
+                        <p:growl id="messages" showDetail="true" />
+                    </h:panelGroup>   
+                </h:form>    
+                <h:form id="formArtigo">    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Link da publicação: " for="link" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <p:messages for="link" id="linkMsg" />
+                            <h:inputText 
+                                id="link"
+                                label="Link"
+                                class="form-control"
+                                value="#{publicacaoController.current.link}" 
+                                pt:placeholder="URL"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Local da publicação: " for="local" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <p:messages for="local" id="localMsg" />
+                            <h:inputText 
+                                id="local"
+                                label="Local"
+                                class="form-control"
+                                value="#{publicacaoController.current.localPub}" 
+                                required="true" 
+                                pt:placeholder="Ex: nome do congresso, periódico, etc."/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Status:" for="status" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:message for="status" showSummary="false" showDetail="true" errorStyle="color: red" infoStyle="color: green"/>
+                            <h:selectOneMenu value="#{publicacaoController.statusId}" id="status" class="form-control">
+                                <f:selectItems 
+                                    value="#{publicacaoController.statusList}" 
+                                    var="item"
+                                    itemLabel="#{item.descricao}"
+                                    itemValue="#{item.id}"/>
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Data:" for="dt" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            
+                            <p:messages for="dt" id="dtMsg" />
+                            <h:inputText  
+                                id="dt" 
+                                label="Data" 
+                                class="date-mask date_picker form-control" 
+                                value="#{publicacaoController.current.data}"
+                                required="true"
+                                pt:placeholder="dd/mm/yyyy"
+                                autocomplete="off">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                <f:validator validatorId="diaUtil" />
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    
+                    <p:messages for="panel-autores" id="panel-autoresMsg" />
+                    <h:panelGroup class="form-group row" >
+                        <div id="panel-autores"
+                                      class="panel panel-default col-sm-6 col-sm-offset-2">
+                            <div class="panel-heading">
+                                <span style="font-size: 16px;">Autores</span>
+                            </div>
+                            <div class="panel-body">
+                                <h:panelGroup id="autores-artigo" class="row">
+                                    <h:dataTable value="#{publicacaoController.autores}" var="autor">
+                                        <h:column>
+                                            <h:panelGroup class="col-md-12">
+                                                <h:inputText 
+                                                    class="form-control"
+                                                    value="#{autor.pessoa.nome} #{autor.pessoa.sobrenome}"
+                                                    pt:readonly="true"
+                                                    />
+                                            </h:panelGroup>
+                                        </h:column>
+                                        <h:column>
+                                            <h:inputHidden id="autor-id" value="#{autor.id}"/>
+                                            <h:commandLink value="" 
+                                                           styleClass="btn btn-danger fa fa-times" 
+                                                           action="#{publicacaoController.removeAutor(autor)}">
+                                                <f:ajax render=":formArtigo:autores-artigo" />
+                                            </h:commandLink>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                                
+                                
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Autor: " for="pessoa1" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-5">                                        
+                                        <p:messages for="autor1" id="autor1Msg" />
+                                        <h:inputHidden 
+                                            id="autor1"
+                                            class="form-control"
+                                            value="#{publicacaoController.autor.pessoa}" >
+                                            <f:converter converterId="pessoaConverter"/>
+                                        </h:inputHidden>
+                                        <h:inputText 
+                                            id="autor-readonly1"
+                                            class="form-control"
+                                            value="" 
+                                            pt:placeholder=""
+                                            pt:readonly="true"/>
+                                    </h:panelGroup>
+                                    <span class="btn btn-default" style="float:left;" onclick="showLightBox('list_pessoa');">Escolher</span>
+                                </h:panelGroup>
+                                <h:commandLink value="Adicionar" action="#{publicacaoController.guardarAutor()}" styleClass="btn  btn-success" style="float: right;  margin-bottom: 4px; font-size: 16px;">
+                                    <i class="fa fa-plus"></i>
+                                    <f:ajax execute="autor1 " render="autores-artigo" />
+                                </h:commandLink>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    
+                    
+                    <p:tabView dynamic="true">
+                        <p:tab title="Resumo"> 
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Título: " for="titulo_pt" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="titulo_pt" id="titulo_ptMsg" />
+                                    <h:inputText 
+                                        id="titulo_pt"
+                                        label="Título"
+                                        class="form-control"
+                                        value="#{publicacaoController.resumo.title}" 
+                                        required="true" 
+                                        pt:placeholder="Título"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Introdução: " for="intro_pt" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="intro_pt" id="intro_ptMsg" />
+                                    <h:inputTextarea 
+                                        id="intro_pt"
+                                        cols="30" rows="10"
+                                        label="Introdução"
+                                        class="form-control"
+                                        value="#{publicacaoController.resumo.intro}" 
+                                        required="true" 
+                                        pt:placeholder="introdução"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Objetivo: " for="objetivo_pt" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="objetivo_pt" id="objetivo_ptMsg" />
+                                    <h:inputTextarea 
+                                        id="objetivo_pt"
+                                        cols="30" rows="10"
+                                        label="Objetivo"
+                                        class="form-control"
+                                        value="#{publicacaoController.resumo.objective}" 
+                                        required="true" 
+                                        pt:placeholder="Objetivo"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Metodologia: " for="metodologia_pt" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="metodologia_pt" id="metodologia_ptMsg" />
+                                    <h:inputTextarea 
+                                        id="metodologia_pt"
+                                        cols="30" rows="10"
+                                        label="Metodologia"
+                                        class="form-control"
+                                        value="#{publicacaoController.resumo.methodology}" 
+                                        required="true" 
+                                        pt:placeholder="Metodologia"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Resultados: " for="resultados_pt" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="resultados_pt" id="resultados_ptMsg" />
+                                    <h:inputTextarea 
+                                        id="resultados_pt"
+                                        cols="30" rows="10"
+                                        label="Resultados"
+                                        class="form-control"
+                                        value="#{publicacaoController.resumo.results}" 
+                                        required="true" 
+                                        pt:placeholder="Resultados"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Conclusão: " for="conclusao_pt" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="conclusao_pt" id="conclusao_ptMsg" />
+                                    <h:inputTextarea 
+                                        id="conclusao_pt"
+                                        cols="30" rows="10"
+                                        label="Conclusão"
+                                        class="form-control"
+                                        value="#{publicacaoController.resumo.conclusion}" 
+                                        required="true" 
+                                        pt:placeholder="Conclusão"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </p:tab>
+                        <p:tab title="Resumo Secundário (opcional)">
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Título: " for="title_en" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="title_en" id="title_enMsg" />
+                                    <h:inputText 
+                                        id="title_en"
+                                        label="Title"
+                                        class="form-control"
+                                        value="#{publicacaoController.abstractPaper.title}" 
+                                        pt:placeholder="Title"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Introdução: " for="intro_en" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="intro_en" id="intro_enMsg" />
+                                    <h:inputTextarea 
+                                        id="intro_en"
+                                        cols="30" rows="10"
+                                        label="Introduction"
+                                        class="form-control"
+                                        value="#{publicacaoController.abstractPaper.intro}" 
+                                        pt:placeholder="Introduction"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Objetivo: " for="objective_en" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="objective_en" id="objective_enMsg" />
+                                    <h:inputTextarea 
+                                        id="objective_en"
+                                        cols="30" rows="10"
+                                        label="Objective"
+                                        class="form-control"
+                                        value="#{publicacaoController.abstractPaper.objective}" 
+                                        pt:placeholder="Objective"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Metodologia: " for="methodology_en" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="methodology_en" id="methodology_enMsg" />
+                                    <h:inputTextarea 
+                                        id="methodology_en"
+                                        cols="30" rows="10"
+                                        label="Methodology"
+                                        class="form-control"
+                                        value="#{publicacaoController.abstractPaper.methodology}" 
+                                        pt:placeholder="Methodology"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Resultados: " for="results_en" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="results_en" id="results_enMsg" />
+                                    <h:inputTextarea 
+                                        id="results_en"
+                                        cols="30" rows="10"
+                                        label="Results"
+                                        class="form-control"
+                                        value="#{publicacaoController.abstractPaper.results}" 
+                                        pt:placeholder="Results"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup class="form-group row">
+                                <h:outputLabel value="Conclusão: " for="conclusion_en" class="col-sm-2 control-label form-label-right"/>
+                                <h:panelGroup class="col-sm-6">
+                                    <p:messages for="conclusion_en" id="conclusion_enMsg" />
+                                    <h:inputTextarea 
+                                        id="conclusion_en"
+                                        cols="30" rows="10"
+                                        label="Conclusion"
+                                        class="form-control"
+                                        value="#{publicacaoController.abstractPaper.conclusion}" 
+                                        pt:placeholder="Conclusion"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </p:tab>
+                            
+                    </p:tabView>
+                
+                    <h:panelGroup class="form-group row">
+                        <h:panelGroup class="col-sm-offset-6">
+                            <h:commandButton value="Salvar Alterações" action="#{publicacaoController.updatePublication()}" class="btn btn-primary"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:form>
+            </h:panelGroup>    
+            <h:panelGroup class="lightbox-wrapper" id="list_pessoa">
+                <ui:include src="/forms/List_Pessoa.xhtml"/>    
+            </h:panelGroup>
+            
+            
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+    <!--index page-->
+    <h:head>
+        <h:outputScript library="jquery" name="jquery-2.1.4.min.js" />
+        <h:outputScript library="bootstrap/js" name="bootstrap.min.js" />
+        <h:outputScript library="metisMenu/dist" name="metisMenu.min.js" />
+        <h:outputStylesheet library="bootstrap/css" name="bootstrap.min.css" />
+        <h:outputStylesheet library="font-awesome-4.4.0/css" name="font-awesome.css" />
+        <h:outputStylesheet library="metisMenu/dist" name="metisMenu.css" />
+        <h:outputStylesheet library="bootstrap/css" name="bootstrap-top-offset.css" />
+    </h:head>
+    <h:body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4 vert-offset-top-10">
+                   <h:panelGroup>
+                        <p:messages for="formList" id="formListMsg" />
+                    </h:panelGroup>
+                    <div class="login-panel panel panel-default">
+                        <div class="panel-heading">
+                            <h:graphicImage class="img-responsive" library="img" name="logomarcaoficial.png" width="140" height="120" style="margin: 0 auto;"/>
+                        </div>
+                        <div class="panel-body">
+                            <h:form id="formList">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <h:inputSecret 
+                                            pt:placeholder="Senha para a atividiade"  
+                                            id="login-password" 
+                                            styleClass="form-control" 
+                                            value="#{presencaController.password}" 
+                                            required="true">
+                                        </h:inputSecret>
+                                    </div>
+
+                                    <h:commandButton 
+                                        class="btn btn-lg btn-success btn-block"
+                                        value="Registrar Presença" 
+                                        action="#{presencaController.logIn()}"
+                                        role="button">
+                                    </h:commandButton>
+                                </fieldset>
+                            </h:form>
+                        </div>
+                        <div classs="panel-body">
+                            <h:form id="Voltar">
+                                <div class="form-group">
+                                    <div class="col-md-12" style="text-align: right; margin-top: 10px;">
+                                        <h:commandLink 
+                                            value="Voltar" 
+                                            action="index.xhtml">
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    </h:body>
+
+</html>

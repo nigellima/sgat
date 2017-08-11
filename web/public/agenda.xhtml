@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <!--index page-->
+    <h:head>
+
+        <h:outputStylesheet library="bootstrap/css" name="container_custom.css" />
+    </h:head>
+    
+    <ui:composition template="/public/template_master.xhtml">
+         
+        <ui:define name="container">
+            <div class="row">
+                <div class="col-md-12"  >
+                    <p:schedule value="#{agendaController.model}" widgetVar="myschedule" locale="pt" timeZone="GMT-3" axisFormat="H:mm" timeFormat="H:mm">
+                         <p:ajax event="eventSelect" listener="#{agendaController.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    </p:schedule>
+                    <p:dialog style="z-index: 200;" height="500px" draggable="false" resizable="false" widgetVar="eventDialog" header="Detalhes" showEffect="clip" hideEffect="clip" width="1000px">
+                        <p:scrollPanel  mode="native" styleClass="row">
+                            <h:panelGroup class="form-group row" style="font-size: 18px">
+                                <h:form>
+                                    <div class="dropdown col-lg-offset-1 pull-left">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                            Opções <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <h:commandLink value=" Cadastrar como viagem" 
+                                                           action="#{viagemController.prepareCreate(agendaController.current)}"
+                                                           styleClass="fa fa-plane" style="font-size: 18px"/>
+                                            </li>
+                                            <li>
+                                                <h:commandLink value=" Editar" 
+                                                           action="#{atividadeController.prepareEditAtividade(agendaController.current)}"
+                                                           styleClass="fa fa-edit" style="font-size: 18px"/>
+                                            </li>
+                                            <li>
+                                                <h:commandLink value=" Comprovante" 
+                                                               styleClass="fa fa-file-pdf-o" style="font-size: 18px">
+                                                    <p:fileDownload value="#{atividadeController.getPdfDocument(agendaController.current)}"/>
+                                                </h:commandLink>
+                                            </li>
+                                            <li>
+                                                <h:commandLink value=" Lista de presença" 
+                                                                styleClass="fa fa-file-pdf-o" style="font-size: 18px">
+                                                    <p:fileDownload value="#{atividadeController.getPdfTableForName(agendaController.current)}"/>
+                                                </h:commandLink>
+                                            </li>
+                                            <li>
+                                                <h:commandLink value=" Listar Presentes Confirmados" 
+                                                           action="#{ataController.createParticipationJSON(agendaController.current)}"
+                                                           styleClass="fa fa-book" style="font-size: 18px"/>
+                                            </li>
+                                            <li>
+                                                <h:panelGroup >
+                                                    <h:commandLink value=" Certificados" 
+                                                                   action="#{agendaController.getCertificados(agendaController.current)}"
+                                                           styleClass="fa fa-certificate" style="font-size: 18px" />
+                                                </h:panelGroup>                                               
+                                            </li>
+                                            <li>
+                                                <h:panelGroup >
+                                                    <h:commandLink value=" Cancelar Atividade" 
+                                                           action="#{solicitacaoController.cancelar(agendaController.current)}"
+                                                           styleClass="fa fa-close" style="font-size: 18px" />
+                                                </h:panelGroup>
+                                            </li>
+                                        </ul>                            
+                                    </div>
+                                </h:form>
+                            </h:panelGroup>
+                            <h:panelGroup id="eventDetails" class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="ID da Atividade" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-4">
+                                        <h:outputText
+                                            class="form-control"
+                                            value="#{agendaController.current.id}">
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Modalidade:" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-4">
+                                        <h:outputText
+                                            class="form-control"
+                                            value="#{agendaController.current.modalidade.descricao}">
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Tipo:" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-4">
+                                        <h:outputText
+                                            class="form-control"
+                                            value="#{agendaController.current.tipo.descricao}">
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Tema Central:" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-9">
+                                        <h:outputText
+                                            class="form-control"
+                                            value="#{agendaController.current.tema}">
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Código DecS: " class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-9">
+                                        <h:outputText
+                                            class="form-control"
+                                            value="#{agendaController.current.codDecs}">
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row" rendered="#{agendaController.current.moderador != null}">
+                                    <h:outputLabel value="Moderador:" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-6">
+                                        <h:outputText  
+                                            class="form-control" 
+                                            value="#{agendaController.current.moderador.nome} #{agendaController.current.moderador.sobrenome}"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row" rendered="#{agendaController.current.moderador != null}">
+                                    <h:outputLabel value="Solicitante" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-6">
+                                        <h:outputText  
+                                            class="form-control" 
+                                            value="#{agendaController.solicitacao.responsavel.nome} #{agendaController.solicitacao.responsavel.sobrenome}"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Descrição:" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-6">
+                                        <h:outputText  
+                                            class="form-control" 
+                                            style="resize: none; height: 100px;" 
+                                            value="#{agendaController.current.descricao}"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Data:" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-2">
+                                        <h:outputText  
+                                            class="date-mask form-control" 
+                                            value="#{agendaController.current.dt}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Início:" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-2">
+                                        <h:outputText 
+                                            class="form-control time-mask" 
+                                            value="#{agendaController.current.hrInicio}">
+                                            <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup class="form-group row">
+                                    <h:outputLabel value="Término:" class="col-sm-2 control-label form-label-right"/>
+                                    <h:panelGroup class="col-sm-2">
+                                        <h:outputText 
+                                            class="form-control time-mask" 
+                                            value="#{agendaController.current.hrTermino}">
+                                            <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                
+                                <h:form id="formEdicaoVideo" rendered="#{agendaController.edicao != null}">
+                                    <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                                        <h:panelGroup class="form-group row">
+                                            <h:outputLabel value="Editor Audiovisual: " for="editor" class="col-sm-2 control-label form-label-right"/>
+                                            <h:panelGroup class="col-sm-4">
+                                                <h:outputText
+                                                    class="form-control"
+                                                    value="#{agendaController.edicao.editor.nome} #{agendaController.edicao.editor.sobrenome}" >
+                                                </h:outputText>
+                                            </h:panelGroup>
+                                        </h:panelGroup> 
+
+                                        <h:panelGroup class="form-group row">
+                                            <h:outputLabel value="Apoio Técnico: " for="apoio" class="col-sm-2 control-label form-label-right"/>
+                                            <h:panelGroup class="col-sm-4">
+                                                <h:outputText
+                                                    class="form-control"
+                                                    value="#{agendaController.edicao.apoioTecnico.nome} #{agendaController.edicao.apoioTecnico.sobrenome}" >
+                                                </h:outputText>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup class="form-group row">
+                                            <h:outputLabel value="Revisor: " for="revisor" class="col-sm-2 control-label form-label-right"/>
+                                            <h:panelGroup class="col-sm-4">
+                                                <h:outputText
+                                                    class="form-control"
+                                                    value="#{agendaController.edicao.revisor.nome} #{agendaController.edicao.revisor.sobrenome}" >
+                                                </h:outputText>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup class="form-group row">
+                                            <h:outputLabel value="Publicação no Youtube: " class="col-sm-2 control-label form-label-right" />
+                                            <h:panelGroup class="col-sm-2">
+                                                <h:outputText 
+                                                    class="form-control date-mask" 
+                                                    value="#{agendaController.edicao.dataYoutube}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                                </h:outputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup class="col-sm-4">
+                                                <h:outputText 
+                                                    class="form-control"
+                                                    value="#{agendaController.edicao.urlYoutube}" />
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup class="form-group row">
+                                            <h:outputLabel value="Publicação no Ares: " class="col-sm-2 control-label form-label-right" />
+                                            <h:panelGroup class="col-sm-2">
+                                                <h:outputText 
+                                                    class="form-control date-mask" 
+                                                    value="#{agendaController.edicao.dataAres}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                                </h:outputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup class="col-sm-4">
+                                                <h:outputText 
+                                                    class="form-control"
+                                                    value="#{agendaController.edicao.urlAres}" />
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:form>
+                                
+                                <h:form>
+                                    <h:panelGroup id="formConexao" rendered="#{agendaController.conexoes != null}">
+                                        <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                                            <h:dataTable styleClass="table table-hover table-striped"
+                                                         value="#{agendaController.conexoes}" var="conexao" style="font-size: 16px">
+                                                <h:column>
+                                                    <f:facet name="header">Polo Remoto</f:facet>
+                                                    <h:outputText value="#{conexao.responsavel.instituicao.descricao}"></h:outputText>
+                                                </h:column>
+                                                <h:column>
+                                                    <f:facet name="header">Responsável</f:facet>
+                                                    <h:outputText 
+                                                        value="#{conexao.responsavel}">
+                                                        <f:converter converterId="funcionarioConverter" />
+                                                    </h:outputText>
+                                                </h:column>
+                                                <h:column>
+                                                    <f:facet name="header">Contato</f:facet>
+                                                    <h:outputText 
+                                                        value="#{conexao.responsavel.ramal}">
+                                                    </h:outputText>
+                                                </h:column>
+                                                <h:column>
+                                                    <f:facet name="header">Descrição</f:facet>
+                                                    <h:outputText value="#{conexao.descricao}"></h:outputText>
+                                                </h:column>
+
+                                                <h:column>
+                                                    <f:facet name="header">Sala</f:facet>
+                                                    <h:outputText value="#{conexao.sala}"></h:outputText>
+                                                </h:column>
+                                                <h:column>
+                                                    <f:facet name="header"></f:facet>
+                                                    <h:commandLink value=" Editar" action="#{atividadeController.prepareEditConexao(conexao)}" 
+                                                                   styleClass="btn btn-primary fa fa-edit col-sm-offset-1"/>
+                                                </h:column>
+                                            </h:dataTable>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:form>
+                                
+                                
+                            </h:panelGroup>
+                        </p:scrollPanel>
+                    </p:dialog>  
+                    <script type="text/javascript">
+                        PrimeFaces.locales['pt'] = { 
+                            closeText: 'Fechar', 
+                            prevText: 'Anterior', 
+                            nextText: 'Próximo', 
+                            currentText: 'Hoje', 
+                            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'], 
+                            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'], 
+                            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'], 
+                            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'], 
+                            dayNamesMin: ['D','S','T','Q','Q','S','S'], 
+                            weekHeader: 'Semana', 
+                            firstDay: 0, 
+                            isRTL: false, 
+                            showMonthAfterYear: false, 
+                            yearSuffix: '', 
+                            timeOnlyTitle: 'Só Horas', 
+                            timeText: 'Tempo', 
+                            hourText: 'Hora', 
+                            minuteText: 'Minuto', 
+                            secondText: 'Segundo', 
+                            ampm: false, 
+                            month: 'Mês', 
+                            week: 'Semana', 
+                            day: 'Dia', 
+                            allDayText : 'Dia Todo' };
+                        
+                        $(document).ready(function(){
+                            $("#j_idt82").css("z-index", 999999);
+                            $("#j_idt82_title").css("color", "#000000");
+                            $("span[class='ui-icon ui-icon-closethick']").removeClass().addClass("fa fa-close").css("color","#000").css("width", "50px;");
+                        });
+                    </script>
+                </div>
+            </div>
+        </ui:define>    
+        <ui:define name="title">        
+            SINTS - Sistema Integrado Telessaúde MA       
+        </ui:define>
+    </ui:composition>
+</html>

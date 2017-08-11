@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui" lang="pt-br">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            <h:form id="form-list-doc">
+                <h:panelGroup  layout="block" style="font-size: 12px; width: 115%">
+                    <div class="row center-block" style="width: 300px;">
+                        <h:commandLink value=" Atualizar" 
+                                   action="#{ataController.createParticipationJSON(ataController.currentBeingSeen)}"
+                                   styleClass="fa fa-refresh btn btn-info" style="font-size: 18px; margin-right: 10px;"/>
+                        
+                       <p:commandLink value=" Resumo" 
+                                   styleClass="btn btn-info" style="font-size: 18px"  onclick="PF('resumo_atv').show();"/>
+                    </div>
+                    
+                    <div id="toolbar">
+                        <select class="form-control">
+                            <option value="">Exportar Básico</option>
+                            <option value="all">Exportar Todos</option>
+                            <option value="selected">Exportar Selecionados</option>
+                        </select>
+                    </div>
+                    <br/>
+                    <table id="participantes-table" 
+                            data-toggle="table"
+                            data-show-columns="true"
+                            data-show-export="true"
+                            data-pagination="true"
+                            data-click-to-select="true"
+                            data-toolbar="#toolbar"
+                            data-show-toggle="true"
+                            data-filter-control="true"
+                            data-key-events="true"
+                            data-url="../resources/data.json"
+                            class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th data-field="state" data-checkbox="true"></th>
+                                <th data-field="nome" data-filter-control="input" data-sortable="true">Nome</th>
+                                <th data-field="sobrenome" data-filter-control="input" data-sortable="true">Sobrenome</th>
+                                <th data-field="prof" data-filter-control="input" data-sortable="true">Profissão</th>
+                                <th data-field="email" data-filter-control="input" data-sortable="true">Email</th>
+                                <th data-field="cpf" data-filter-control="input" data-sortable="true">CPF</th>
+                                <th data-field="celular" data-filter-control="input" data-sortable="true">Celular</th>
+                                <th data-field="cidade" data-filter-control="input" data-sortable="true">Cidade</th>
+                                <th data-field="estado" data-filter-control="input" data-sortable="true">Estado</th>
+                                <th data-field="avaliacao" data-filter-control="input" data-sortable="true">Avaliação</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <script>
+                        var $table = $a('#participantes-table');
+                        $a(function () {
+                            $a('#toolbar').find('select').change(function () {
+                                $table.bootstrapTable('destroy').bootstrapTable({
+                                    exportDataType: $a(this).val()
+                                });
+                            });
+                            $a($table).bootstrapTable({
+                                showFilter: true
+                            });
+                        })
+                    </script>
+                </h:panelGroup>
+            </h:form>
+            
+            
+            <p:dialog header="Dados Consolidados" widgetVar="resumo_atv"  
+                      height="400" width="800"
+                      showEffect="drop" hideEffect="drop"
+                      style="z-index: 10">
+                <b>Título</b>: #{ataController.currentBeingSeen.tema}<br/><br/>
+
+                <b>Data/hora</b>: 
+                <h:outputText  
+                    class="date-mask" 
+                    value="#{ataController.currentBeingSeen.dt}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                </h:outputText> de 
+                
+                <h:outputText 
+                    class="time-mask" 
+                    value="#{ataController.currentBeingSeen.hrInicio}">
+                    <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                </h:outputText>
+                
+                às
+                
+                <h:outputText 
+                    class="time-mask" 
+                    value="#{ataController.currentBeingSeen.hrTermino}">
+                    <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                </h:outputText><br/><br/>
+
+                <p>
+                    Tivemos participações de 
+                    #{graficosController.getQtdOfParticipants(ataController.currentBeingSeen)} profissionais da saúde 
+                    conectados em #{graficosController.getQtdOfDistinctPoints(ataController.currentBeingSeen)} pontos, 
+                    distribuídos em #{graficosController.getQtdOfDistinctCities(ataController.currentBeingSeen)} cidades e 
+                    #{graficosController.getQtdOfDistinctStates(ataController.currentBeingSeen)} estados. <br/>
+                    Os profissionais com maior número de participações foram: <br/><br/>  
+                    
+                    <ui:repeat var="o" value="#{graficosController.getDistinctProfs(ataController.currentBeingSeen)} " varStatus="status">
+                        #{o.toString()}<br/>
+                    </ui:repeat>
+                    <br/><br/>  
+                    As cidades com maior número de participações foram:
+                    <br/><br/>  
+                    <ui:repeat var="o" value="#{graficosController.getDistinctCidades(ataController.currentBeingSeen)} " varStatus="status">
+                        #{o.toString()}<br/>
+                    </ui:repeat>
+                </p>
+                
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>

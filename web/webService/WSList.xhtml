@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Web Service"></h:outputText>
+        </ui:define>
+        <ui:define name="body">  
+            <script>
+            </script>
+            <h:form id="form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+
+                <h:panelGroup class="col-lg-12" layout="block">                
+                    <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                        
+                        <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                            <h:panelGroup class="form-group row">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:panelGroup id="pessoaBtn" class="col-sm-3">   
+                                        <h:commandButton class="btn btn-info"
+                                            value='Procurar Pessoas' 
+                                            action="#{pessoaRepository.prepareRepository()}">
+                                            <f:ajax execute="@this form:input" render="form:pessoaOutput" onevent="loadPessoa"></f:ajax>
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="pessoaCarregando" style="display: none;">
+                                        <h:graphicImage id="pessoaImage" value="#{resource['img:loading3.gif']}" style="display: none; margin-right: 10px;"></h:graphicImage>
+                                        Procurando novas Pessoas
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="pessoaOutput" style="display: none;">
+                                        #{pessoaRepository.numOfUpdates()} Pessoas para atualizar
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup class="col-sm-3" id="pessoaInsertBtn" style="display: none;">
+                                        <h:commandButton class="btn btn-info"  rendered="#{pessoaRepository.numOfUpdates() > 0}"
+                                            value='Insert New' 
+                                            action="#{pessoaRepository.insertNew()}">
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                            <h:panelGroup class="form-group row">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:panelGroup id="munBtn" class="col-sm-3">   
+                                        <h:commandButton class="btn btn-info"
+                                            value='Procurar Municípios' 
+                                            action="#{municipioRepository.prepareRepository()}">
+                                            <f:ajax execute="@this form:input" render="form:munOutput" onevent="loadMun"></f:ajax>
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="munCarregando" style="display: none;">
+                                        <h:graphicImage id="munImage" value="#{resource['img:loading3.gif']}" style="display: none; margin-right: 10px;"></h:graphicImage>
+                                        Procurando novos Municípios
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="munOutput" style="display: none;">
+                                        #{municipioRepository.numOfUpdates()} Municípios para atualizar
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup class="col-sm-3" id="munInsertBtn" style="display: none;">
+                                        <h:commandButton class="btn btn-info"  rendered="#{municipioRepository.numOfUpdates() > 0}"
+                                            value='Insert New' 
+                                            action="#{municipioRepository.insertNew()}">
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                            <h:panelGroup class="form-group row">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:panelGroup id="ubsBtn" class="col-sm-3">   
+                                        <h:commandButton class="btn btn-info"
+                                            value='Procurar UBSs' 
+                                            action="#{ubsRepository.prepareRepository()}">
+                                            <f:ajax execute="@this form:input" render="form:ubsOutput" onevent="loadUbs"></f:ajax>
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="ubsCarregando" style="display: none;">
+                                        <h:graphicImage id="ubsImage" value="#{resource['img:loading3.gif']}" style="display: none; margin-right: 10px;"></h:graphicImage>
+                                        Procurando novas UBSs
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="ubsOutput" style="display: none;">
+                                        #{ubsRepository.numOfUpdates()} UBSs para atualizar
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup class="col-sm-3" id="ubsInsertBtn" style="display: none;">
+                                        <h:commandButton class="btn btn-info" rendered="#{ubsRepository.numOfUpdates() > 0}"
+                                            value='Insert New' 
+                                            action="#{ubsRepository.insertNew()}">
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                            <h:panelGroup class="form-group row">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:panelGroup id="cboBtn" class="col-sm-3">   
+                                        <h:commandButton class="btn btn-info"
+                                            value='Procurar CBOs' 
+                                            action="#{cboRepository.prepareRepository()}">
+                                            <f:ajax execute="@this form:input" render="form:cboOutput" onevent="loadCbo"></f:ajax>
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="cboCarregando" style="display: none;">
+                                        <h:graphicImage id="cboImage" value="#{resource['img:loading3.gif']}" style="display: none; margin-right: 10px;"></h:graphicImage>
+                                        Procurando novos CBOs
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="cboOutput" style="display: none;">
+                                        #{cboRepository.numOfUpdates()} CBOs para atualizar
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup class="col-sm-3" id="cboInsertBtn" style="display: none;">
+                                        <h:commandButton class="btn btn-info" rendered="#{cboRepository.numOfUpdates() > 0}"
+                                            value='Insert New' 
+                                            action="#{cboRepository.insertNew()}">
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                            <h:panelGroup class="form-group row">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:panelGroup id="equipeBtn" class="col-sm-3">   
+                                        <h:commandButton class="btn btn-info"
+                                            value='Procurar Equipe' 
+                                            action="#{equipeRepository.prepareRepository()}">
+                                            <f:ajax execute="@this form:input" render="form:equipeOutput" onevent="loadEquipe"></f:ajax>
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="equipeCarregando" style="display: none;">
+                                        <h:graphicImage id="equipeImage" value="#{resource['img:loading3.gif']}" style="display: none; margin-right: 10px;"></h:graphicImage>
+                                        Procurando novas Equipes
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="equipeOutput" style="display: none;">
+                                        #{equipeRepository.numOfUpdates()} Equipes para atualizar
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup class="col-sm-3" id="equipeInsertBtn" style="display: none;">
+                                        <h:commandButton class="btn btn-info"  rendered="#{equipeRepository.numOfUpdates() > 0}"
+                                            value='Insert New' 
+                                            action="#{equipeRepository.insertNew()}">
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                                                
+                        <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                            <h:panelGroup class="form-group row">
+                                <h:panelGroup class="col-sm-10">
+                                    <h:panelGroup id="profBtn" class="col-sm-3">   
+                                        <h:commandButton class="btn btn-info"
+                                            value='Procurar Profissional' 
+                                            action="#{profissionalRepository.prepareRepository()}">
+                                            <f:ajax execute="@this form:input" render="form:profOutput" onevent="loadProf"></f:ajax>
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="profCarregando" style="display: none;">
+                                        <h:graphicImage id="profImage" value="#{resource['img:loading3.gif']}" style="display: none; margin-right: 10px;"></h:graphicImage>
+                                        Procurando novos Vínculos
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup id="profOutput" style="display: none;">
+                                        #{profissionalRepository.numOfUpdates()} Vínculos para atualizar
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup class="col-sm-3" id="profInsertBtn" style="display: none;">
+                                        <h:commandButton class="btn btn-info"  rendered="#{profissionalRepository.numOfUpdates() > 0}"
+                                            value='Insert New' 
+                                            action="#{profissionalRepository.insertNew()}">
+                                        </h:commandButton>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

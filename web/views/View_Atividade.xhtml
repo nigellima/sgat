@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="body">
+            #{atividadeController.setSelectedData()}
+            
+            <h:panelGroup id="formAtividade">
+                <h:panelGroup class="panel panel-default" layout="block" style="width:100%; padding: 5px">
+                    <h:panelGroup class="form-group row" style="font-size: 18px">
+                        <div class="dropdown col-lg-offset-1">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                Opções <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <h:commandLink value=" Cadastrar como viagem" 
+                                           action="#{viagemController.prepareCreate(atividadeController.current)}"
+                                           styleClass="fa fa-plane" style="font-size: 18px"/>
+                                </li>
+                                <li>
+                                    <h:commandLink value=" Editar" 
+                                           action="#{atividadeController.prepareEditAtividade(atividadeController.current)}"
+                                           styleClass="fa fa-edit" style="font-size: 18px"/>
+                                </li>
+                                <li>
+                                    <h:commandLink value=" Comprovante" 
+                                                    styleClass="fa fa-file-pdf-o" style="font-size: 18px">
+                                        <p:fileDownload value="#{atividadeController.pdfDocument}"/>
+                                    </h:commandLink>
+                                </li>
+                                <li>
+                                    <h:commandLink value=" Lista de Presentes" 
+                                                    styleClass="fa fa-file-pdf-o" style="font-size: 18px">
+                                        <p:fileDownload value="#{atividadeController.pdfListaDePresentes}"/>
+                                    </h:commandLink>
+                                </li>
+                                <li>
+                                    <h:commandLink value=" Ata de participantes" 
+                                                    styleClass="fa fa-file-pdf-o" style="font-size: 18px">
+                                        <p:fileDownload value="#{atividadeController.pdfTableForName}"/>
+                                    </h:commandLink>
+                                </li>
+                                <li>
+                                    <h:link value=" Certificados"
+                                                   outcome="/views/view_certificados_list"
+                                                    styleClass="fa fa-certificate" 
+                                                    style="font-size: 18px">
+                                    </h:link>
+                                </li>
+                                <li>
+                                    <h:commandLink value=" Listar Presentes Confirmados" 
+                                               action="#{ataController.createParticipationJSON(atividadeController.current)}"
+                                               styleClass="fa fa-book" style="font-size: 18px"/>
+                                </li>
+                                <li>
+                                    <h:panelGroup rendered="#{atividadeController.isPendente(atividadeController.current)}">
+                                        <h:commandLink value=" Cancelar Atividade" 
+                                               action="#{solicitacaoController.cancelar(atividadeController.current)}"
+                                               styleClass="fa fa-close" style="font-size: 18px" />
+                                    </h:panelGroup>
+                                </li>
+                            </ul>                            
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="ID da Atividade" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:outputText
+                                class="form-control"
+                                value="#{atividadeController.current.id}">
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Modalidade:" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:outputText
+                                class="form-control"
+                                value="#{atividadeController.current.modalidade.descricao}">
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Tipo:" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-4">
+                            <h:outputText
+                                class="form-control"
+                                value="#{atividadeController.current.tipo.descricao}">
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Tema Central:" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-9">
+                            <h:outputText
+                                class="form-control"
+                                value="#{atividadeController.current.tema}">
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row" rendered="#{atividadeController.current.moderador != null}">
+                        <h:outputLabel value="Moderador:" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <h:outputText  
+                                class="form-control" 
+                                value="#{atividadeController.current.moderador.nome} #{atividadeController.current.moderador.sobrenome}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row" rendered="#{atividadeController.current.moderador != null}">
+                        <h:outputLabel value="Solicitante" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <h:outputText  
+                                class="form-control" 
+                                value="#{atividadeController.solicitacao.responsavel.nome} #{atividadeController.solicitacao.responsavel.sobrenome}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row" 
+                                  rendered="#{not empty atividadeController.findPalestras(atividadeController.current)}">
+                        <h:outputLabel value="Palestras:" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-9">
+                            <h:dataTable class="table table-hover table-striped" value="#{atividadeController.findPalestras(atividadeController.current)}" var="item">
+                                <h:column>
+                                    <h:outputText  
+                                        class="form-control" 
+                                        value="#{item.tema}"/>
+                                </h:column>
+                                <h:column>
+                                    <h:outputText  
+                                        class="form-control" 
+                                        value="#{item.pessoa.nome} #{item.pessoa.sobrenome}"/>
+                                </h:column>
+                            </h:dataTable>
+                        </h:panelGroup>
+                        
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Descrição:" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-6">
+                            <h:outputText  
+                                class="form-control" 
+                                style="resize: none; height: 100px;" 
+                                value="#{atividadeController.current.descricao}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Data:" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            <h:outputText  
+                                class="date-mask form-control" 
+                                value="#{atividadeController.current.dt}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Início:" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            <h:outputText 
+                                class="form-control time-mask" 
+                                value="#{atividadeController.current.hrInicio}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row">
+                        <h:outputLabel value="Término:" class="col-sm-2 control-label form-label-right"/>
+                        <h:panelGroup class="col-sm-2">
+                            <h:outputText 
+                                class="form-control time-mask" 
+                                value="#{atividadeController.current.hrTermino}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row" rendered="#{ataController.hasAtaDigitalizada() != false}">
+                        <h:panelGroup class="col-sm-6">
+                            <h:commandLink class="btn btn-primary" value="Baixar Ata Preenchida">
+                                <p:fileDownload value="#{ataController.getAtaParticipantesFromServer()}" />
+                            </h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="form-group row" rendered="#{ataController.hasAtaDigitalizadaSlides() != false}">
+                        <h:panelGroup class="col-sm-6">
+                            <h:commandLink class="btn btn-primary" value="Baixar Slides de Apresentação">
+                                <p:fileDownload value="#{ataController.getAtaSlidesFromServer()}" />
+                            </h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>
